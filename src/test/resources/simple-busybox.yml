@@ -1,0 +1,12 @@
+foo:
+  image: busybox:1.24.1
+  command: sh -c "while true; do sleep 1; done"
+  ports:
+    - "9090"
+    - "9091"
+bar:
+  image: busybox:1.24.1
+  command: sh -c "while true; do sleep 1; done"
+  ports:
+    - "8080"
+    - "8081"

@@ -1,0 +1,16 @@
+foo:
+  container_name: foo
+  image: "foo:latest"
+  ports:
+   - "8090:8080"
+   - "192.168.0.1:8081:8081"
+  links:
+   - "bar:bar"
+  command: bin/echo 'Hello world!'
+  environment:
+    test: test
+  volumes:
+    - /foo:/foo
+bar:
+  container_name: bar
+  image: "bar:latest"

@@ -1,0 +1,6 @@
+rabbit_name_test:
+  image: "rabbitmq:3.5.0-management"
+  links:
+   - "rabbit_name_test_child:bar"
+rabbit_name_test_child:
+  image: "rabbitmq:3.5.0-management"
