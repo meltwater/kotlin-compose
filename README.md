@@ -4,6 +4,8 @@ Kotlin-compose is a [docker-compose](https://docs.docker.com/compose/) wrapper f
 This library is mainly intended to be used in embedded integration tests. 
 
 [![Build Status](https://travis-ci.org/meltwater/kotlin-compose.svg?branch=master)](https://travis-ci.org/meltwater/kotlin-compose)
+[![jcenter](https://api.bintray.com/packages/meltwater/opensource/kotlin-compose/images/download.svg) ](https://bintray.com/meltwater/opensource/kotlin-compose/_latestVersion)
+
 ## How to use it
 
 ### Dependencies
