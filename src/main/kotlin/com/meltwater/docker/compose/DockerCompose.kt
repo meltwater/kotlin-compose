@@ -14,7 +14,7 @@ import java.util.HashMap
 /**
  * This class takes a path to a docker-compose yaml file and copies it to a temporary location when initialized.
  *
- * After that it is possible to start, stop, inspect and kill the containers that are
+ * After initialization it is possible to start, stop, inspect and kill the containers that are configured in the yaml file.
  */
 class DockerCompose(classPathYmlResource: String,
                     private val prefix: String,
