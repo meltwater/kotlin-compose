@@ -1,9 +1,7 @@
 # Overview
 
-Docker-compose-java is a [docker-compose](https://docs.docker.com/compose/) wrapper for the JVM.
+Kotlin-compose is a [docker-compose](https://docs.docker.com/compose/) wrapper for the JVM.
 This library is mainly intended to be used in embedded integration tests. 
-
-![Build Status](https://travis-ci.com/meltwater/docker-compose-java.svg?token=4xk1R5pGndzXY3VX7h8C&branch=master)
 
 ## How to use it
 
@@ -19,7 +17,7 @@ repositories {
 ...
 
 dependencies {
-    compile 'com.meltwater.docker:docker-compose-java:<insert-version>'
+    compile 'com.meltwater.docker:kotlin-compose:<insert-version>'
     ...
 }
 ```
@@ -47,7 +45,7 @@ dependencies {
 
 <dependency>
   <groupId>com.meltwater.docker</groupId>
-  <artifactId>docker-compose-java</artifactId>
+  <artifactId>kotlin-compose</artifactId>
   <version><insert-version></version>
   <type>jar</type>
   ...

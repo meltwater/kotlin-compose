@@ -89,10 +89,10 @@ bintray {
     publish = false
     pkg {
         repo = 'opensource'
-        name = 'docker-compose-java'
+        name = 'kotlin-compose'
         userOrg = 'meltwater'
         licenses = ['MIT']
-        vcsUrl = 'git@github.com:meltwater/docker-compose-java.git'
+        vcsUrl = 'git@github.com:meltwater/kotlin-compose.git'
         version {
             gpg{
                 sign = true

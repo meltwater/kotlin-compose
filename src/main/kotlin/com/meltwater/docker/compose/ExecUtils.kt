@@ -41,7 +41,7 @@ object ExecUtils {
                 useDockerMachine = true
             }
         } else if (SystemUtils.IS_OS_WINDOWS) {
-            throw RuntimeException("Windows not supported by docker-compose-java")
+            throw RuntimeException("Windows not supported by kotlin-compose")
         }
     }
 
