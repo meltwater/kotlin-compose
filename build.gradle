@@ -86,7 +86,7 @@ bintray {
     user = getenv('BINTRAY_USER')
     key = getenv('BINTRAY_KEY')
     publications = ['JavaArtifacts']
-    publish = false
+    publish = true
     pkg {
         repo = 'opensource'
         name = 'kotlin-compose'
