@@ -98,3 +98,6 @@ Upload to custom Nexus repository:
     
 To upload a non-snapshot version, omit the snapshot env variable.
 
+### License
+[MIT](LICENSE.txt)
+
