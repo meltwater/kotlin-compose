@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ev
+set -ex
 if [ -n "${TRAVIS_TAG}" ]; then
     if [ -z "${BINTRAY_USER}" ]; then
         echo "BINTRAY_USER is unset or set to the empty string"
