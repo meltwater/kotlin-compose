@@ -2,6 +2,7 @@ package com.meltwater.docker.compose
 
 import com.meltwater.docker.compose.ExecUtils.NOOP_CONSUMER
 import com.meltwater.docker.compose.ExecUtils.executeCommand
+import com.meltwater.docker.compose.ExecUtils.executeCommandAsync
 import com.meltwater.docker.compose.data.InspectData
 import org.apache.commons.io.IOUtils
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 import java.util.HashMap
+import kotlin.concurrent.thread
 
 /**
  * This class takes a path to a docker-compose yaml file and copies it to a temporary location when initialized.
@@ -25,6 +27,15 @@ class DockerCompose(classPathYmlResource: String,
     val EXEC_INFO_LOGGER = { line: String ->
         LOGGER.info(line)
     }
+
+    val STDOUT_LOG_CONSUMER = { line: String ->
+        LOGGER.trace("OUT: "+line)
+    }
+
+    val STDERR_LOG_CONSUMER = { line: String ->
+        LOGGER.info("ERR: "+line)
+    }
+
 
     private var MIN_DOCKER_COMPOSE_VERSION: DefaultArtifactVersion = DefaultArtifactVersion("1.5.0")
     private var ymlTmpfilename: String
@@ -54,6 +65,8 @@ class DockerCompose(classPathYmlResource: String,
 
     fun up(): List<InspectData> {
         exec("up -d", EXEC_INFO_LOGGER)
+        val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
+        forwardDockerLog(logCmd)
         val ps: List<InspectData> = ps()
         val deadServices = ps.filter { it.state.dead || !it.state.running }
             .filter { !it.name.contains("puppy") }
@@ -61,6 +74,21 @@ class DockerCompose(classPathYmlResource: String,
             throw RuntimeException("Failed to start up all containers, the dead services are: ${deadServices.map { it.name }}")
         }
         return ps
+    }
+
+    private fun forwardDockerLog(procLogger: ProcessWrapper) {
+        thread {
+            try {
+                val exitCode = procLogger.waitFor()
+                if (exitCode != 0) {
+                    LOGGER.error("The 'logs -f' command finished with a non 0 exit code '{}'", exitCode)
+                } else {
+                    LOGGER.debug("The 'logs -f' command terminated successfully.")
+                }
+            } catch (e: Exception) {
+                LOGGER.error("The 'logs -f' command threw an unexpected error", e)
+            }
+        }
     }
 
     fun build() {
@@ -104,6 +132,10 @@ class DockerCompose(classPathYmlResource: String,
 
     private fun exec(command: String, listener: (String) -> Unit): String {
         return executeCommand("docker-compose --project-name $prefix --file $ymlTmpfilename $command", env, listener)
+    }
+
+    private fun execAsync(command: String, stdOut: (String) -> Unit, stdErr: (String) -> Unit): ProcessWrapper {
+        return executeCommandAsync("docker-compose --project-name $prefix --file $ymlTmpfilename $command", env, stdOut, stdErr)
     }
 
     private fun verifyDockerComposeInstallation() {
