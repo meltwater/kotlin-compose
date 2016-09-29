@@ -1,5 +1,6 @@
 package com.meltwater.docker.compose
 
+import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.SystemUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -7,7 +8,8 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 import kotlin.text.Charsets.UTF_8
 
 object ExecUtils {
@@ -77,7 +79,7 @@ object ExecUtils {
             val process = pb.start()
 
             val result = collectAndLogResult(process.inputStream, listener)
-            val errors = process.errorStream.readString()
+            val errors = IOUtils.toString(process.errorStream)
 
             if (process.waitFor() != 0) {
                 throw RuntimeException(errors)
