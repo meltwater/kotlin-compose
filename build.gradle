@@ -21,7 +21,7 @@ task ('wrapper', type:Wrapper) {
     gradleVersion = '3.1'
 }
 
-project.version = project.version + (getenv("SNAPSHOT")== null?"":"-SNAPSHOT")
+project.version = project.version + ('false' == getenv("SNAPSHOT") ? '' : '-SNAPSHOT')
 project.group = 'com.meltwater.docker'
 
 

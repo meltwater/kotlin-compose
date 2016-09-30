@@ -16,3 +16,4 @@ script:
   - ./upload_to_bintray.sh
 env:
   global:
+    - SNAPSHOT=false
