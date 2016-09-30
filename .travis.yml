@@ -12,7 +12,7 @@ cache:
   - $HOME/.gradle/wrapper/
 install: true
 script:
-  - ./gradlew clean build
+  - ./gradlew clean build --no-daemon
   - ./upload_to_bintray.sh
 env:
   global:
