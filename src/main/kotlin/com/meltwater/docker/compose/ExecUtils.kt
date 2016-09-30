@@ -59,6 +59,10 @@ object ExecUtils {
         return execLocal(adjustForOs(command), env, listener)
     }
 
+    fun executeCommandAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
+        return execLocalAsync(adjustForOs(command), env, stdOutListener, stdErrListener)
+    }
+
     fun execLocal(command: String): String {
         return execLocal(command, hashMapOf(), NOOP_CONSUMER)
     }
@@ -68,21 +72,21 @@ object ExecUtils {
             val commands = ArrayList<String>()
             commands.add("sh")
             commands.add("-c")
-
             commands.add(command)
 
             val pb = ProcessBuilder(commands)
             pb.environment().putAll(env)
-
             LOGGER.info("Running: ${pb.command()} \n with env $env")
 
             val process = pb.start()
-
-            val result = collectAndLogResult(process.inputStream, listener)
+            val result = collectOutput(process.inputStream, listener)
             val errors = IOUtils.toString(process.errorStream)
 
             if (process.waitFor() != 0) {
+                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
                 throw RuntimeException(errors)
+            }else{
+                LOGGER.trace("stdout: {}", result)
             }
             return result
         } catch (e: IOException) {
@@ -92,7 +96,7 @@ object ExecUtils {
         }
     }
 
-    private fun collectAndLogResult(inputStream: InputStream, listener: (String) -> Unit): String {
+    private fun collectOutput(inputStream: InputStream, listener: (String) -> Unit): String {
         val out = StringBuilder()
         val buf: BufferedReader = inputStream.bufferedReader(UTF_8)
         var line: String? = buf.readLine()
@@ -104,6 +108,19 @@ object ExecUtils {
             line = buf.readLine()
         } while (line != null)
         return out.toString()
+    }
+
+    fun execLocalAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
+        val commands = ArrayList<String>()
+        commands.add("sh")
+        commands.add("-c")
+        commands.add(command)
+
+        val pb = ProcessBuilder(commands)
+        pb.environment().putAll(env)
+
+        LOGGER.info("Running: ${pb.command()} \n with env $env")
+        return ProcessWrapper(pb, stdOutListener, stdErrListener)
     }
 
     private fun adjustForOs(command: String): String {
