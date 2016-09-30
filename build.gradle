@@ -21,7 +21,8 @@ task ('wrapper', type:Wrapper) {
     gradleVersion = '3.1'
 }
 
-project.version = project.version + ('false' == getenv("SNAPSHOT") ? '' : '-SNAPSHOT')
+//SNAPSHOT=false and not set is the same thing. SNAPSHOT=true is the only way to build a snapshot
+project.version = project.version + ('true' == getenv("SNAPSHOT") ? '-SNAPSHOT' : '')
 project.group = 'com.meltwater.docker'
 
 
