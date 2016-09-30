@@ -29,7 +29,7 @@ class DockerCompose(classPathYmlResource: String,
     }
 
     val STDOUT_LOG_CONSUMER = { line: String ->
-        LOGGER.trace("OUT: "+line)
+        LOGGER.debug("OUT: "+line)
     }
 
     val STDERR_LOG_CONSUMER = { line: String ->
