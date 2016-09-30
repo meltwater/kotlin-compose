@@ -20,7 +20,7 @@ repositories {
 ...
 
 dependencies {
-    compile 'com.meltwater.docker:kotlin-compose:<insert-version>'
+    compile 'com.meltwater.docker:kotlin-compose:$VERSION'
     ...
 }
 ```
@@ -46,13 +46,15 @@ dependencies {
 </repositories>
 ...
 
-<dependency>
-  <groupId>com.meltwater.docker</groupId>
-  <artifactId>kotlin-compose</artifactId>
-  <version><insert-version></version>
-  <type>jar</type>
-  ...
-</dependency>
+<dependencies>
+    <dependency>
+      <groupId>com.meltwater.docker</groupId>
+      <artifactId>kotlin-compose</artifactId>
+      <version>$VERSION</version>
+      <type>jar</type>
+    </dependency>
+    ...
+</dependencies>    
 ```
 
 ### Java code example
