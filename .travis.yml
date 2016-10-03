@@ -13,6 +13,5 @@ cache:
 install: true
 script:
   - ./gradlew clean build --no-daemon
-  - ./upload_to_bintray.sh
 env:
   global:
