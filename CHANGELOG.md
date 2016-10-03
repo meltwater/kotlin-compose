@@ -1,5 +1,5 @@
 # kotlin-compose
-## next
+## 1.1.1 - 2016-10-03
 ### Changes
 - Changed build logic. SNAPSHOT is not appended by gradle anymore.
 
