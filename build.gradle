@@ -21,10 +21,7 @@ task ('wrapper', type:Wrapper) {
     gradleVersion = '3.1'
 }
 
-//SNAPSHOT=false and not set is the same thing. SNAPSHOT=true is the only way to build a snapshot
-project.version = project.version + ('true' == getenv("SNAPSHOT") ? '-SNAPSHOT' : '')
 project.group = 'com.meltwater.docker'
-
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -32,9 +29,6 @@ apply plugin: "maven-publish"
 apply plugin: 'kotlin'
 apply plugin: 'groovy'
 apply plugin: 'com.jfrog.bintray'
-
-logger.info("Project version is set to {}", project.version)
-
 
 repositories {
     jcenter()

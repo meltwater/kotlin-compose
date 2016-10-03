@@ -97,10 +97,8 @@ If you're an authorized owner of the project, you may upload a released version 
 
 Upload to custom Nexus repository:
 
-    SNAPSHOT=true MAVEN_USER=[USER] MAVEN_PASSWORD=[PASSWORD] MAVEN_URL=[MAVEN_REPO]repositories/[REPOSITORY] ./gradlew clean build publishJavaArtifactsPublicationToMavenRepository
+    MAVEN_USER=[USER] MAVEN_PASSWORD=[PASSWORD] MAVEN_URL=[MAVEN_REPO]repositories/[REPOSITORY] ./gradlew clean build publishJavaArtifactsPublicationToMavenRepository
     
-To upload a non-snapshot version, omit the snapshot env variable.
-
 ### License
 [MIT](LICENSE.txt)
 
