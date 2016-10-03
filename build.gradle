@@ -86,10 +86,10 @@ bintray {
     publish = true
     pkg {
         repo = 'opensource'
-        name = 'kotlin-compose'
+        name = project.name
         userOrg = 'meltwater'
         licenses = ['MIT']
-        vcsUrl = 'git@github.com:meltwater/kotlin-compose.git'
+        vcsUrl = "https://github.com/meltwater/${project.name}"
         version {
             gpg{
                 sign = true
