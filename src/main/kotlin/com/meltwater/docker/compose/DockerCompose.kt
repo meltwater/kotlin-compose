@@ -4,7 +4,6 @@ import com.meltwater.docker.compose.ExecUtils.NOOP_CONSUMER
 import com.meltwater.docker.compose.ExecUtils.executeCommand
 import com.meltwater.docker.compose.ExecUtils.executeCommandAsync
 import com.meltwater.docker.compose.data.InspectData
-import org.apache.commons.io.IOUtils
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -55,7 +54,7 @@ class DockerCompose(classPathYmlResource: String,
         try {
             val ymlStream: InputStream = DockerCompose::class.java.classLoader.getResourceAsStream(classPathYmlResource)
             val tmpFile = File.createTempFile(prefix, ".yml")
-            tmpFile.writeBytes(IOUtils.toString(ymlStream).toByteArray())
+            tmpFile.writeBytes(ymlStream.readString().toByteArray())
             ymlStream.close()
             return tmpFile.path
         } catch (ex: Exception) {
@@ -143,7 +142,7 @@ class DockerCompose(classPathYmlResource: String,
             val versionOutput = executeCommand("docker-compose --version")
             val v: MatchResult? = Regex(".* (\\d+\\.\\d+\\.\\d+)").find(versionOutput)
             val version = v?.groups?.get(1)?.value
-            if (MIN_DOCKER_COMPOSE_VERSION.compareTo(DefaultArtifactVersion(version)) > 0) {
+            if (MIN_DOCKER_COMPOSE_VERSION > DefaultArtifactVersion(version)) {
                 throw RuntimeException("The installed docker-compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
             }
         } catch(e: Exception) {

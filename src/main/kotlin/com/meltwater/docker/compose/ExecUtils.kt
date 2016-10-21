@@ -1,6 +1,5 @@
 package com.meltwater.docker.compose
 
-import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.SystemUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -80,7 +79,7 @@ object ExecUtils {
 
             val process = pb.start()
             val result = collectOutput(process.inputStream, listener)
-            val errors = IOUtils.toString(process.errorStream)
+            val errors = process.errorStream.readString()
 
             if (process.waitFor() != 0) {
                 LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
