@@ -12,7 +12,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.15'
         classpath "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -20,11 +20,11 @@ buildscript {
 }
 
 plugins {
-    id "com.jfrog.bintray" version "1.7"
+    id "com.jfrog.bintray" version "1.8.0"
 }
 
 task ('wrapper', type:Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '4.3.1'
 }
 
 project.group = 'com.meltwater.docker'
