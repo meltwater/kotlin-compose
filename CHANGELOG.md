@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.2.0 - 2017-11-24
 ### Changes
 - Uses kotlin version 1.1.60
