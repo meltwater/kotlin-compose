@@ -3,6 +3,7 @@
 ### Changes
 - Uses kotlin version 1.1.60
 - Updates a number of other dependencies. For example jackson, commons-lang3 and commons-io.
+- Adds javadoc as an additional jar artifact
 
 ## 1.1.1 - 2016-10-03
 ### Changes
