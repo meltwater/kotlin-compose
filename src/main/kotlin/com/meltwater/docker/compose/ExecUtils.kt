@@ -8,6 +8,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.nio.charset.Charset
 import java.util.ArrayList
 import java.util.HashMap
 import kotlin.text.Charsets.UTF_8
@@ -80,7 +81,7 @@ object ExecUtils {
 
             val process = pb.start()
             val result = collectOutput(process.inputStream, listener)
-            val errors = IOUtils.toString(process.errorStream)
+            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
 
             if (process.waitFor() != 0) {
                 LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)

@@ -10,6 +10,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
+import java.nio.charset.Charset
 import java.util.HashMap
 import kotlin.concurrent.thread
 
@@ -55,7 +56,7 @@ class DockerCompose(classPathYmlResource: String,
         try {
             val ymlStream: InputStream = DockerCompose::class.java.classLoader.getResourceAsStream(classPathYmlResource)
             val tmpFile = File.createTempFile(prefix, ".yml")
-            tmpFile.writeBytes(IOUtils.toString(ymlStream).toByteArray())
+            tmpFile.writeBytes(IOUtils.toString(ymlStream, Charset.forName("utf-8")).toByteArray())
             ymlStream.close()
             return tmpFile.path
         } catch (ex: Exception) {
