@@ -85,7 +85,7 @@ object ExecUtils {
             if (process.waitFor() != 0) {
                 LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
                 throw RuntimeException(errors)
-            }else{
+            } else {
                 LOGGER.trace("stdout: {}", result)
             }
             return result

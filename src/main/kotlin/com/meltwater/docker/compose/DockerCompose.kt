@@ -29,11 +29,11 @@ class DockerCompose(classPathYmlResource: String,
     }
 
     val STDOUT_LOG_CONSUMER = { line: String ->
-        LOGGER.debug("OUT: "+line)
+        LOGGER.debug("OUT: " + line)
     }
 
     val STDERR_LOG_CONSUMER = { line: String ->
-        LOGGER.info("ERR: "+line)
+        LOGGER.info("ERR: " + line)
     }
 
 
@@ -69,7 +69,7 @@ class DockerCompose(classPathYmlResource: String,
         forwardDockerLog(logCmd)
         val ps: List<InspectData> = ps()
         val deadServices = ps.filter { it.state.dead || !it.state.running }
-            .filter { !it.name.contains("puppy") }
+                .filter { !it.name.contains("puppy") }
         if (deadServices.isNotEmpty()) {
             throw RuntimeException("Failed to start up all containers, the dead services are: ${deadServices.map { it.name }}")
         }
@@ -146,7 +146,7 @@ class DockerCompose(classPathYmlResource: String,
             if (MIN_DOCKER_COMPOSE_VERSION.compareTo(DefaultArtifactVersion(version)) > 0) {
                 throw RuntimeException("The installed docker-compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             throw RuntimeException("Unable to determine the docker-compose version. " +
                     "Please make sure it's installed and available to the user. " +
                     "The version should be at least $MIN_DOCKER_COMPOSE_VERSION", e)
