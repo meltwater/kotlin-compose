@@ -1,6 +1,6 @@
 import static java.lang.System.getenv
 buildscript {
-    ext.kotlin_version = '1.0.4'
+    ext.kotlin_version = '1.1.60'
 
     repositories {
         mavenCentral()
@@ -37,14 +37,14 @@ repositories {
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.12"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "com.fasterxml.jackson.core:jackson-core:2.7.2"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.7.2"
-    compile "org.apache.commons:commons-lang3:3.4"
-    compile "commons-io:commons-io:2.4"
-    compile "org.apache.maven:maven-artifact:3.0.3"
+    compile "com.fasterxml.jackson.core:jackson-core:2.8.10"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.8.10"
+    compile "org.apache.commons:commons-lang3:3.7"
+    compile "commons-io:commons-io:2.6"
+    compile "org.apache.maven:maven-artifact:3.0.5"
 
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile 'ch.qos.logback:logback-classic:1.1.7'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testCompile 'ch.qos.logback:logback-classic:1.2.3'
 
 }
 
