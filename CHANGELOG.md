@@ -1,5 +1,5 @@
 # kotlin-compose
-## next
+## 1.2.1 - 2017-11-25
 ### Changes
 - Adds scm, license and other project metadata to the generated pom file
 - All usages of IOUtils.toString now uses utf-8 charset
