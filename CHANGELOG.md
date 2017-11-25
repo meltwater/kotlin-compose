@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.2.1 - 2017-11-25
 ### Changes
 - Adds scm, license and other project metadata to the generated pom file
