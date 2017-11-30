@@ -5,6 +5,7 @@ This library is mainly intended to be used in embedded integration tests.
 
 [![Build Status](https://travis-ci.org/meltwater/kotlin-compose.svg?branch=master)](https://travis-ci.org/meltwater/kotlin-compose)
 [![jcenter](https://api.bintray.com/packages/meltwater/opensource/kotlin-compose/images/download.svg) ](https://bintray.com/meltwater/opensource/kotlin-compose/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.meltwater.docker/kotlin-compose/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.meltwater.docker/kotlin-compose)
 
 ## How to use it
 
@@ -28,33 +29,13 @@ dependencies {
 *Maven:*
 
 ```xml  
-<repositories>
-   <repository>
-      <id>jcenter</id>
-      <url>http://jcenter.bintray.com</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>warn</checksumPolicy>
-      </snapshots>
-       <releases>
-         <enabled>true</enabled>
-         <checksumPolicy>warn</checksumPolicy>
-      </releases>
-   </repository>
-   ...
-</repositories>
-...
 
-<dependencies>
     <dependency>
       <groupId>com.meltwater.docker</groupId>
       <artifactId>kotlin-compose</artifactId>
       <version>$VERSION</version>
       <type>jar</type>
     </dependency>
-    ...
-</dependencies>    
 ```
 
 ### Java code example
