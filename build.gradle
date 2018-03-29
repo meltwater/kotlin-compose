@@ -2,12 +2,7 @@ import static java.lang.System.getenv
 
 buildscript {
     ext.kotlin_version = '1.2.20'
-    
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
@@ -35,12 +30,6 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'groovy'
 apply plugin: 'com.jfrog.bintray'
 
-sourceCompatibility = 1.8
-
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.12"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -52,7 +41,6 @@ dependencies {
     
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
     testCompile 'ch.qos.logback:logback-classic:1.2.3'
-    
 }
 
 task version() {
