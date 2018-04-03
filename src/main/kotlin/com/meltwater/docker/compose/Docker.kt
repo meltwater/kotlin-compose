@@ -27,7 +27,7 @@ object Docker {
         if (containerId.isEmpty()) {
             return arrayListOf()
         }
-        val ids: String = containerId.fold(" ", { a, b -> "$a $b" })
+        val ids: String = containerId.joinToString(" ")
         val message = exec("inspect $ids")
 
         val typeRef = object : TypeReference<List<InspectData>>() {}

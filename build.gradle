@@ -1,13 +1,14 @@
 import static java.lang.System.getenv
 
 buildscript {
+
     ext.kotlin_version = '1.2.31'
-    
+
     repositories {
         jcenter()
         maven {  url  "https://dl.bintray.com/kotlin/dokka" }    
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
@@ -21,7 +22,7 @@ plugins {
     id "com.jfrog.bintray" version "1.8.0"
 }
 
-task('wrapper', type: Wrapper) {
+task ('wrapper', type:Wrapper) {
     gradleVersion = '4.6'
 }
 
@@ -49,10 +50,10 @@ dependencies {
     compile "org.apache.commons:commons-lang3:3.7"
     compile "commons-io:commons-io:2.6"
     compile "org.apache.maven:maven-artifact:3.0.5"
-    
+
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
     testCompile 'ch.qos.logback:logback-classic:1.2.3'
-    
+
 }
 
 task version() {
@@ -62,7 +63,7 @@ task version() {
 
 dokka {
     includes = ['Module.md']
-    
+
     linkMapping {
         dir = "src/main/kotlin"
         url = "https://github.com/meltwater/kotlin-compose"
@@ -96,13 +97,13 @@ def pomConfig = {
             distribution 'repo'
         }
     }
-    
+
     scm {
         url 'https://github.com/meltwater/kotlin-compose'
         connection 'scm:git:git://github.com/meltwater/kotlin-compose.git'
         developerConnection 'scm:git:git@github.com:meltwater/kotlin-compose.git'
     }
-    
+
     developers {
         developer {
             name 'Meltwater Team Horace'

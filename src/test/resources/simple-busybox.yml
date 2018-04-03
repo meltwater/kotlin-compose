@@ -1,12 +1,21 @@
-foo:
-  image: busybox:1.24.1
-  command: sh -c "while true; do sleep 1; done"
-  ports:
-    - "9090"
-    - "9091"
-bar:
-  image: busybox:1.24.1
-  command: sh -c "while true; do sleep 1; done"
-  ports:
-    - "8080"
-    - "8081"
+version: '2.1'
+services:
+  foo:
+    image: busybox:1.24.1
+    command: sh -c "while true; do sleep 1; done"
+    ports:
+      - "9090"
+      - "9091"
+  bar:
+    image: busybox:1.24.1
+    command: sh -c "while true; do sleep 1; done"
+    ports:
+      - "8080"
+      - "8081"
+  bar-host:
+    image: busybox:1.24.1
+    command: sh -c "while true; do sleep 1; done"
+    network_mode: "host"
+    ports:
+      - "38080:8080"
+      - "38081:8081"
