@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.3.0 - 2018-04-05
 ### Changes
 - Add support for host networking #8
