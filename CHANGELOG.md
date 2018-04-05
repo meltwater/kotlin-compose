@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Adds back removed method in NetworkSettings. The method is now marked as deprecated but still there.
 
 ## 1.3.0 - 2018-04-05
 ### Changes

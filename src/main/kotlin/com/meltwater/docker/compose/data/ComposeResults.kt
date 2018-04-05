@@ -14,9 +14,8 @@ data class InspectData(
     fun bindingForTcpPort(internalPort: String): String {
         val ports  = if (hostConfig.networkMode == "host") hostConfig.ports else networkSettings.ports
 
-        val hostPort = ports?.get("$internalPort/tcp")?.first()?.hostPort
-                ?: throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: ${ports}")
-        return hostPort
+        return ports?.get("$internalPort/tcp")?.first()?.hostPort
+                ?: throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: $ports")
     }
 
 }
@@ -31,7 +30,14 @@ data class HostConfig(
         @param:JsonProperty("PortBindings") val ports: LinkedHashMap<String, Array<PortBinding>>?)
 
 data class NetworkSettings(
-        @param:JsonProperty("Ports") val ports: Map<String, Array<PortBinding>>?)
+        @param:JsonProperty("Ports") val ports: Map<String, Array<PortBinding>>?) {
+
+    @Deprecated("Use the InspectData.bindingForTcpPort() instead", replaceWith = ReplaceWith("InspectData.bindingForTcpPort()"))
+    fun bindingForTcpPort(internalPort: String): String {
+        return ports?.get("$internalPort/tcp")?.first()?.hostPort ?:
+                throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: $ports")
+    }
+}
 
 data class PortBinding(
         @param:JsonProperty("HostIp") val hostIp: String,
