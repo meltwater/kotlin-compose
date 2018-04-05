@@ -74,12 +74,17 @@ If you're an authorized owner of the project, you may upload a released version 
 
     BINTRAY_USER=[USER] BINTRAY_KEY=[API_KEY] ./gradlew clean build bintray
     
-### Upload to Nexus
+### Upload to Artifactory
 
-Upload to custom Nexus repository:
+Upload to Meltwater Artifactory repository:
 
-    MAVEN_USER=[USER] MAVEN_PASSWORD=[PASSWORD] MAVEN_URL=[MAVEN_REPO]repositories/[REPOSITORY] ./gradlew clean build publishJavaArtifactsPublicationToMavenRepository
-    
+    ./gradlew clean build artifactoryPublish
+
+With the following settings given in ~/.gradle/gradle.properties
+
+    systemProp.artifactory_user=..
+    systemProp.artifactory_password=..
+
 ### License
 [MIT](LICENSE.txt)
 
