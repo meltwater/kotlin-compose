@@ -1,7 +1,8 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Add support for host networking #8
+- Uses kotlin v 1.2.31
 
 ## 1.2.1 - 2017-11-25
 ### Changes
