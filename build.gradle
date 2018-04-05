@@ -5,12 +5,13 @@ buildscript {
     
     repositories {
         jcenter()
+        maven {  url  "https://dl.bintray.com/kotlin/dokka" }    
     }
     
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.15'
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.16'
         classpath "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
