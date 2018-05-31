@@ -1,0 +1,5 @@
+version: '2.1'
+services:
+  foo:
+    image: docker:edge
+    command: sh -c "while true; do sleep 1; done"
