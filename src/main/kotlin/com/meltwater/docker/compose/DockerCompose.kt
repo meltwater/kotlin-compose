@@ -92,6 +92,10 @@ class DockerCompose(classPathYmlResource: String,
         }
     }
 
+    fun pull() {
+        exec("pull --ignore-pull-failures", EXEC_INFO_LOGGER)
+    }
+
     fun build() {
         exec("build", EXEC_INFO_LOGGER)
     }

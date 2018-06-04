@@ -9,7 +9,7 @@ class DockerComposeTest extends Specification {
     private static DockerCompose compose
 
     void setupSpec() throws Exception {
-        compose = new DockerCompose("simple-busybox.yml", "compose_test", new HashMap<String, String>())
+        compose = new DockerCompose("simple-busybox.yml", "composetest", new HashMap<String, String>())
     }
 
     void cleanup() throws Exception {
@@ -61,5 +61,10 @@ class DockerComposeTest extends Specification {
                 it.state.dead
                 !it.state.running
             }
+    }
+
+    def 'can pull updates'() {
+        def dockerCompose = new DockerCompose("test-pull.yml", "pull_test", new HashMap<String, String>())
+        dockerCompose.pull()
     }
 }

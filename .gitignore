@@ -3,6 +3,7 @@
 ### Gradle template
 .gradle
 build/
+out/
 *.iml
 
 # Ignore Gradle GUI config
