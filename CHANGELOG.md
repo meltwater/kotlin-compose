@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Now possible to run docker pull from within the DockerCompose class
 
 ## 1.3.1 - 2018-04-05
 ### Changes
