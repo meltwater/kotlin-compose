@@ -12,7 +12,7 @@ data class InspectData(
      * Finds a single binding for an internal TCP port
      */
     fun bindingForTcpPort(internalPort: String): String {
-        val ports  = if (hostConfig.networkMode == "host") hostConfig.ports else networkSettings.ports
+        val ports = if (hostConfig.networkMode == "host") hostConfig.ports else networkSettings.ports
 
         return ports?.get("$internalPort/tcp")?.first()?.hostPort
                 ?: throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: $ports")
@@ -34,8 +34,8 @@ data class NetworkSettings(
 
     @Deprecated("Use the InspectData.bindingForTcpPort() instead", replaceWith = ReplaceWith("InspectData.bindingForTcpPort()"))
     fun bindingForTcpPort(internalPort: String): String {
-        return ports?.get("$internalPort/tcp")?.first()?.hostPort ?:
-                throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: $ports")
+        return ports?.get("$internalPort/tcp")?.first()?.hostPort
+                ?: throw RuntimeException("Port mapping not found for internalPort $internalPort. Available ports are: $ports")
     }
 }
 

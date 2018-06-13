@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Add ability to attach to an existing container
 
 ## 1.4.0 - 2018-06-04
 ### Changes

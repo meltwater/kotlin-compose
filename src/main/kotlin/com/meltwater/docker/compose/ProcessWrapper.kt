@@ -7,13 +7,13 @@ import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
 
-class ProcessWrapper(val pb: ProcessBuilder, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit) {
+class ProcessWrapper(private val pb: ProcessBuilder, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit) {
 
-    val LOGGER: Logger = LoggerFactory.getLogger(ExecUtils::class.java)
+    private val LOGGER: Logger = LoggerFactory.getLogger(ExecUtils::class.java)
 
     val process: Process
-    val stdOutReader: Thread
-    val stdErrReader: Thread
+    private val stdOutReader: Thread
+    private val stdErrReader: Thread
     var exitCode: Int = -1
 
     init {
@@ -21,7 +21,7 @@ class ProcessWrapper(val pb: ProcessBuilder, stdOutListener: (String) -> Unit, s
         stdOutReader = readThread("OUT:", process.inputStream, stdOutListener)
         stdErrReader = readThread("ERR:", process.errorStream, stdErrListener)
         //Add a shutdown hook so that if the JVM is stopped the os process is also terminated
-        Runtime.getRuntime().addShutdownHook(Thread() {
+        Runtime.getRuntime().addShutdownHook(Thread {
             stop(5)
         })
     }

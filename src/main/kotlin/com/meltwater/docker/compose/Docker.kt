@@ -9,11 +9,7 @@ import com.meltwater.docker.compose.data.InspectData
 
 object Docker {
 
-    private var mapper: ObjectMapper
-
-    init {
-        mapper = ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    }
+    private var mapper: ObjectMapper = ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     fun kill(containerName: String) {
         exec("kill $containerName")
@@ -35,6 +31,6 @@ object Docker {
     }
 
     private fun exec(command: String): String {
-        return executeCommand("docker " + command)
+        return executeCommand("docker $command")
     }
 }

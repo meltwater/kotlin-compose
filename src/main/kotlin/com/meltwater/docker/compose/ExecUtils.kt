@@ -10,12 +10,11 @@ import java.io.IOException
 import java.io.InputStream
 import java.nio.charset.Charset
 import java.util.ArrayList
-import java.util.HashMap
 import kotlin.text.Charsets.UTF_8
 
 object ExecUtils {
 
-    val LOGGER: Logger = LoggerFactory.getLogger(ExecUtils::class.java)
+    private val LOGGER: Logger = LoggerFactory.getLogger(ExecUtils::class.java)
 
     private var dockerMachineInstance: String = "notNeededOnLinux"
     private var useDockerMachine: Boolean = false
@@ -49,18 +48,19 @@ object ExecUtils {
     private fun findRunningDockerMachineInstance(): String {
         return execLocal("docker-machine ls").lines()
                 .find { it.contains("Running") }
-                ?.split(" ")?.get(0) ?: throw RuntimeException("Could not determine what docker-machine or local Docker For Mac instance to use. Make sure you have at least one up and running")
+                ?.split(" ")?.get(0)
+                ?: throw RuntimeException("Could not determine what docker-machine or local Docker For Mac instance to use. Make sure you have at least one up and running")
     }
 
     fun executeCommand(command: String): String {
         return executeCommand(command, hashMapOf(), NOOP_CONSUMER)
     }
 
-    fun executeCommand(command: String, env: HashMap<String, String>, listener: (String) -> Unit): String {
+    fun executeCommand(command: String, env: Map<String, String>, listener: (String) -> Unit): String {
         return execLocal(adjustForOs(command), env, listener)
     }
 
-    fun executeCommandAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
+    fun executeCommandAsync(command: String, env: Map<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
         return execLocalAsync(adjustForOs(command), env, stdOutListener, stdErrListener)
     }
 
@@ -68,7 +68,7 @@ object ExecUtils {
         return execLocal(command, hashMapOf(), NOOP_CONSUMER)
     }
 
-    fun execLocal(command: String, env: HashMap<String, String>, listener: (String) -> Unit): String {
+    fun execLocal(command: String, env: Map<String, String>, listener: (String) -> Unit): String {
         try {
             val commands = ArrayList<String>()
             commands.add("sh")
@@ -111,7 +111,7 @@ object ExecUtils {
         return out.toString()
     }
 
-    fun execLocalAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
+    fun execLocalAsync(command: String, env: Map<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
         val commands = ArrayList<String>()
         commands.add("sh")
         commands.add("-c")

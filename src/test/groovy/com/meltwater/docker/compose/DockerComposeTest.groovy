@@ -24,7 +24,7 @@ class DockerComposeTest extends Specification {
 
     def 'test simple compose.up'() {
         when:
-            List<InspectData> inspectData = compose.up()
+            List<InspectData> inspectData = compose.up(Recreate.DEFAULT)
         then:
             inspectData.size() == 3
             inspectData[0].state.running
@@ -40,7 +40,7 @@ class DockerComposeTest extends Specification {
 
     def 'test port mappings'() {
         when:
-            List<InspectData> inspectData = compose.up()
+            List<InspectData> inspectData = compose.up(Recreate.DEFAULT)
         then:
             inspectData.size() == 3
             inspectData[0].bindingForTcpPort("8080") == "38080"
@@ -51,7 +51,7 @@ class DockerComposeTest extends Specification {
 
     def 'kill single container'() {
         given:
-            compose.up()
+            compose.up(Recreate.DEFAULT)
         when:
             compose.kill("composetest_foo_1")
         then:
