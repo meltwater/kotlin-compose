@@ -12,6 +12,7 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import java.util.HashMap
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.concurrent.thread
@@ -22,7 +23,7 @@ import kotlin.concurrent.thread
  * After initialization it is possible to start, stop, inspect and kill the containers that are configured in the yaml file.
  */
 class DockerCompose private constructor(private val prefix: String,
-                                        private val env: Map<String, String>,
+                                        private val env: HashMap<String, String>,
                                         private val dockerComposeFilename: String) {
 
     companion object {
@@ -49,7 +50,7 @@ class DockerCompose private constructor(private val prefix: String,
 
         private val ENVIRONMENT_VARIABLE_SEPARATOR = Pattern.compile("=")
 
-        private fun initializeNewDockerComposeSession(classPathYmlResource: String, env: Map<String, String>): String {
+        private fun initializeNewDockerComposeSession(classPathYmlResource: String, env: HashMap<String, String>): String {
             val composeFile = File.createTempFile(classPathYmlResource, YAML_FILE_EXTENSION)
             val dockerComposeFilename = composeFile.absolutePath
             saveResourceToTmpFolder(classPathYmlResource, composeFile)
@@ -69,25 +70,26 @@ class DockerCompose private constructor(private val prefix: String,
             }
         }
 
-        private fun saveEnvironmentFile(env: Map<String, String>, environmentFileName: String) {
+        private fun saveEnvironmentFile(env: HashMap<String, String>, environmentFileName: String) {
             val environmentPath = Paths.get(environmentFileName)
             val environment = env.entries.joinToString("\n") { "${it.key}=${it.value}" }
             Files.write(environmentPath, environment.toByteArray(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)
         }
 
-        private fun loadEnvironmentFile(fileNamePrefix: String): Map<String, String> {
+        private fun loadEnvironmentFile(fileNamePrefix: String): HashMap<String, String> {
             val environmentPath = Paths.get(fileNamePrefix + ENVIRONMENT_FILE_EXTENSION)
             if (!(Files.exists(environmentPath) && Files.isRegularFile(environmentPath))) {
                 LOGGER.warn("Cannot find the environment file: $environmentPath")
-                return emptyMap()
+                return hashMapOf()
             }
-            return Files.lines(environmentPath)
+            val env: Map<String, String> = Files.lines(environmentPath)
                     .map { it.trim() }
                     .filter { !it.startsWith("#") }
                     .filter { it.isNotBlank() }
                     .map { it.split(ENVIRONMENT_VARIABLE_SEPARATOR, 2) }
                     .filter { it.size == 2 }
                     .collect(Collectors.toMap({ it[0] }, { it[1] }))
+            return HashMap(env)
         }
 
     }
@@ -96,14 +98,16 @@ class DockerCompose private constructor(private val prefix: String,
         verifyDockerComposeInstallation()
     }
 
-    constructor(classPathYmlResource: String, applicationPrefix: String, env: Map<String, String>) : this(applicationPrefix, env, initializeNewDockerComposeSession(classPathYmlResource, env))
+    constructor(classPathYmlResource: String, applicationPrefix: String, env: HashMap<String, String>) : this(applicationPrefix, env, initializeNewDockerComposeSession(classPathYmlResource, env))
 
     constructor(applicationPrefix: String, fileNamePrefix: String) : this(applicationPrefix, loadEnvironmentFile(fileNamePrefix), fileNamePrefix + YAML_FILE_EXTENSION)
 
-    constructor(classPathYmlResource: String, applicationPrefix: String, fileNamePrefix: String, env: Map<String, String>) : this(applicationPrefix, env, fileNamePrefix + YAML_FILE_EXTENSION) {
+    constructor(classPathYmlResource: String, applicationPrefix: String, fileNamePrefix: String, env: HashMap<String, String>) : this(applicationPrefix, env, fileNamePrefix + YAML_FILE_EXTENSION) {
         saveResourceToTmpFolder(classPathYmlResource, File(fileNamePrefix + YAML_FILE_EXTENSION))
         saveEnvironmentFile(env, fileNamePrefix + ENVIRONMENT_FILE_EXTENSION)
     }
+
+    fun up(): List<InspectData> = up(Recreate.DEFAULT)
 
     fun up(recreate: Recreate = DEFAULT): List<InspectData> {
         exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
