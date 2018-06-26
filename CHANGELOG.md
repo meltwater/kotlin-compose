@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.5.1 - 2018-06-26
 ### Changes
 - Fix compatibility issues from 1.5.0
