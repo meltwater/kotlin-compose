@@ -161,6 +161,10 @@ class DockerCompose private constructor(private val prefix: String,
         return prefix
     }
 
+    fun getEnv(name: String): String? {
+        return env[name]
+    }
+
     private fun exec(command: String): String {
         return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, NOOP_CONSUMER)
     }

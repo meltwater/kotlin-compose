@@ -38,6 +38,24 @@ class DockerComposeTest extends Specification {
             !inspectData[2].state.dead
     }
 
+    def 'get an existing environment variable'() {
+        given: 'A docker compose object with an environment variable'
+            compose = new DockerCompose("simple-busybox.yml", "composetest", new HashMap<String, String>(["key": "value"]))
+        when: 'The variable is requested'
+            def result = compose.getEnv("key")
+        then: 'The variable is returned'
+            result == "value"
+    }
+
+    def 'getting a non-existent environment variable returns null'() {
+        given: 'A docker compose object with an environment variable'
+            compose = new DockerCompose("simple-busybox.yml", "composetest", new HashMap<String, String>(["key": "value"]))
+        when: 'The variable is requested'
+            def result = compose.getEnv("foo")
+        then: 'The variable is returned'
+            result == null
+    }
+
     def 'test port mappings'() {
         when:
             List<InspectData> inspectData = compose.up(Recreate.DEFAULT)
