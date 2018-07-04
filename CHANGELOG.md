@@ -1,5 +1,5 @@
 # kotlin-compose
-## next
+## 1.6.0 - 2018-07-04
 ### Changes
 - Add ability to get environment variables set during object creation
 
