@@ -15,7 +15,7 @@ buildscript {
         classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.16'
         classpath "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4+"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.13.0"
     }
 }
 
