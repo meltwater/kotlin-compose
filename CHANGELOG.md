@@ -1,5 +1,5 @@
 # kotlin-compose
-## next
+## 1.7.0 - 2020-05-25
 ### Changes
 - Upgrades version of kotlin to 1.3.72
 - Upgrades version of gradle to 6.3
