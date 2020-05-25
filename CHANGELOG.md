@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.7.0 - 2020-05-25
 ### Changes
 - Upgrades version of kotlin to 1.3.72
