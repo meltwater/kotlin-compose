@@ -1,7 +1,9 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Upgrades version of kotlin to 1.3.72
+- Upgrades version of gradle to 6.3
+- Removes the non maintained travis build config
 
 ## 1.6.0 - 2018-07-04
 ### Changes
