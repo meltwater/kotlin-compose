@@ -135,13 +135,13 @@ artifactory {
     contextUrl = 'https://meltwater.jfrog.io/meltwater'
     publish {
         repository {
-            repoKey = 'team-horace'
+            repoKey = 'opensource'
             username = System.getProperty("artifactory_user")
             password = System.getProperty("artifactory_password")
             maven = true
         }
         repository {
-            repoKey = 'opensource'
+            repoKey = 'team-horace'
             username = System.getProperty("artifactory_user")
             password = System.getProperty("artifactory_password")
             maven = true
