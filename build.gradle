@@ -140,28 +140,14 @@ artifactory {
             password = System.getProperty("artifactory_password")
             maven = true
         }
+        repository {
+            repoKey = 'opensource'
+            username = System.getProperty("artifactory_user")
+            password = System.getProperty("artifactory_password")
+            maven = true
+        }
         defaults {
             publishConfigs('archives', 'artifacts')
-        }
-    }
-}
-
-bintray {
-    user = getenv('BINTRAY_USER')
-    key = getenv('BINTRAY_KEY')
-    publications = ['JavaArtifacts']
-    publish = true
-    pkg {
-        repo = 'opensource'
-        name = project.name
-        userOrg = 'meltwater'
-        licenses = ['MIT']
-        vcsUrl = "https://github.com/meltwater/${project.name}"
-        version {
-            gpg {
-                sign = true
-            }
-            released = new Date()
         }
     }
 }
