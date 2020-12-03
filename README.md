@@ -70,10 +70,8 @@ Install to your local .m2 directory:
  
 ### Upload to jcenter
 
-If you're an authorized owner of the project, you may upload a released version to Bintray.
+No new artifacts will be pushed to jcenter for the moment.
 
-    BINTRAY_USER=[USER] BINTRAY_KEY=[API_KEY] ./gradlew clean build bintray
-    
 ### Upload to Artifactory
 
 Upload to Meltwater Artifactory repository:
