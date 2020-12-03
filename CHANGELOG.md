@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 1.8.0 - 2020-12-03
 ### Changes
 - Push only to Artifactory
