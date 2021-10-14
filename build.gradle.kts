@@ -13,15 +13,23 @@ project.group = "com.meltwater.docker"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
-repositories {
-    mavenCentral()
+configurations {
+    all {
+        resolutionStrategy {
+            eachDependency {
+                // This is needed in order to sync with what's defined in waldo
+                if(requested.group.startsWith("com.fasterxml.jackson"))
+                    useVersion("2.12.2")
+            }
+        }
+    }
 }
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.slf4j:slf4j-api:1.7.32")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.12.4")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.4")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.12.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.2")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.maven:maven-artifact:3.8.2")
@@ -81,6 +89,10 @@ if (project.hasProperty("artifactory_user")) {
 } else {
     userName = System.getProperty("artifactory_user")
     passWord = System.getProperty("artifactory_password")
+}
+
+repositories {
+    mavenCentral()
 }
 
 publishing {
