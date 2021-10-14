@@ -55,6 +55,11 @@ tasks {
             }
         }
     }
+
+    // This is needed due to Jenkins using "artifactoryPublish" in scripts instead of publish.
+    named("artifactoryPublish") {
+        dependsOn(publish)
+    }
 }
 
 artifacts {
