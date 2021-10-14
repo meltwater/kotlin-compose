@@ -10,6 +10,7 @@ plugins {
 }
 
 project.group = "com.meltwater.docker"
+project.version = "${properties["projectVersion"]}"
 
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
