@@ -57,7 +57,7 @@ tasks {
     }
 
     // This is needed due to Jenkins using "artifactoryPublish" in scripts instead of publish.
-    named("artifactoryPublish") {
+    register("artifactoryPublish") {
         dependsOn(publish)
     }
 }
