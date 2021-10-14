@@ -1,7 +1,7 @@
 # kotlin-compose
-## next
+## 1.9.0 - 2021-10-14
 ### Changes
-- No changes
+- Bumped gradle to 7.2 and migrated to kotlin
 
 ## 1.8.0 - 2020-12-03
 ### Changes
