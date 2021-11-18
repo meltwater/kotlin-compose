@@ -1,0 +1,14 @@
+
+  apiVersion: backstage.io/v1alpha1
+  kind: Component
+  metadata:
+    name: kotlin-compose
+    annotations:
+      github.com/project-slug: meltwater/kotlin-compose
+      backstage.io/techdocs-ref: url:https://github.com/meltwater/kotlin-compose
+
+  spec:
+    type: library
+    lifecycle: production
+    owner: horace
+  
