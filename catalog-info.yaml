@@ -5,8 +5,8 @@ metadata:
     github.com/project-slug: meltwater/kotlin-compose
   name: kotlin-compose
   tags:
-  - kotlin
   - groovy
+  - kotlin
 spec:
   lifecycle: production
   owner: horace
