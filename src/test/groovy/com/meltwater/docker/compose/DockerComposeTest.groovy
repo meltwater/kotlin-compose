@@ -1,6 +1,7 @@
 package com.meltwater.docker.compose
 
 import com.meltwater.docker.compose.data.InspectData
+import com.meltwater.docker.compose.data.PsResult
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -24,18 +25,24 @@ class DockerComposeTest extends Specification {
 
     def 'test simple compose.up'() {
         when:
-            List<InspectData> inspectData = compose.up(Recreate.DEFAULT)
+            PsResult inspectData = compose.up(Recreate.DEFAULT)
+            def barHost = inspectData.getData("bar-host-1")
+            def bar = inspectData.getData("bar-1")
+            def foo = inspectData.getData("foo-1")
         then:
-            inspectData.size() == 3
-            inspectData[0].state.running
-            inspectData[0].name == "/composetest_bar-host_1"
-            !inspectData[0].state.dead
-            inspectData[1].state.running
-            inspectData[1].name == "/composetest_bar_1"
-            !inspectData[1].state.dead
-            inspectData[2].name == "/composetest_foo_1"
-            inspectData[2].state.running
-            !inspectData[2].state.dead
+            inspectData.asList().size() == 3
+
+            foo.name == "composetest_foo_1" || foo.name == "composetest-foo-1" // docker-compose v2 changed from underscore to dash, allow both
+            foo.state.running
+            !foo.state.dead
+
+            bar.name == "composetest_bar_1" || bar.name == "composetest-bar-1"
+            bar.state.running
+            !bar.state.dead
+
+            barHost.name == "composetest_bar-host_1" || barHost.name == "composetest-bar-host-1"
+            barHost.state.running
+            !barHost.state.dead
     }
 
     def 'get an existing environment variable'() {
@@ -58,27 +65,16 @@ class DockerComposeTest extends Specification {
 
     def 'test port mappings'() {
         when:
-            List<InspectData> inspectData = compose.up(Recreate.DEFAULT)
+            PsResult inspectData = compose.up(Recreate.DEFAULT)
+            def barHost = inspectData.getData("bar-host-1")
+            def bar = inspectData.getData("bar-1")
+            def foo = inspectData.getData("foo-1")
         then:
-            inspectData.size() == 3
-            inspectData[0].bindingForTcpPort("8080") == "38080"
-            inspectData[0].bindingForTcpPort("8081") == "38081"
-            !inspectData[1].bindingForTcpPort("8080").isEmpty()
-            !inspectData[2].bindingForTcpPort("9090").isEmpty()
-    }
-
-    def 'kill single container'() {
-        given:
-            compose.up(Recreate.DEFAULT)
-        when:
-            compose.kill("composetest_foo_1")
-        then:
-            List<InspectData> inspectData = compose.ps()
-            inspectData.size() == 3
-            inspectData.each {
-                it.state.dead
-                !it.state.running
-            }
+            inspectData.asList().size() == 3
+            barHost.bindingForTcpPort("8080") == "38080"
+            barHost.bindingForTcpPort("8081") == "38081"
+            !bar.bindingForTcpPort("8080").isEmpty()
+            !foo.bindingForTcpPort("9090").isEmpty()
     }
 
     def 'can pull updates'() {

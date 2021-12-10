@@ -4,10 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class InspectData(
         @param:JsonProperty("Id") val id: String,
-        @param:JsonProperty("Name") val name: String,
+        @param:JsonProperty("Name") val rawName: String,
         @param:JsonProperty("State") val state: ContainerState,
         @param:JsonProperty("HostConfig") val hostConfig: HostConfig,
         @param:JsonProperty("NetworkSettings") val networkSettings: NetworkSettings) {
+
+    val name: String = if (rawName.startsWith('/')) {
+        rawName.substring(1)
+    } else {
+        rawName
+    }
+
     /**
      * Finds a single binding for an internal TCP port
      */

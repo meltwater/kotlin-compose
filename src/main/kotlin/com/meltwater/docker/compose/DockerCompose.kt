@@ -5,6 +5,7 @@ import com.meltwater.docker.compose.ExecUtils.executeCommand
 import com.meltwater.docker.compose.ExecUtils.executeCommandAsync
 import com.meltwater.docker.compose.Recreate.DEFAULT
 import com.meltwater.docker.compose.data.InspectData
+import com.meltwater.docker.compose.data.PsResult
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -107,14 +108,14 @@ class DockerCompose private constructor(private val prefix: String,
         saveEnvironmentFile(env, fileNamePrefix + ENVIRONMENT_FILE_EXTENSION)
     }
 
-    fun up(): List<InspectData> = up(Recreate.DEFAULT)
+    fun up(): PsResult = up(Recreate.DEFAULT)
 
-    fun up(recreate: Recreate = DEFAULT): List<InspectData> {
+    fun up(recreate: Recreate = DEFAULT): PsResult {
         exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
-        val ps: List<InspectData> = ps()
-        val deadServices = ps.filter { it.state.dead || !it.state.running }
+        val ps: PsResult = ps()
+        val deadServices = ps.asList().filter { it.state.dead || !it.state.running }
                 .filter { !it.name.contains("puppy") }
         if (deadServices.isNotEmpty()) {
             throw RuntimeException("Failed to start up all containers, the dead services are: ${deadServices.map { it.name }}")
@@ -134,8 +135,8 @@ class DockerCompose private constructor(private val prefix: String,
         exec("kill")
         var lastCheck: List<InspectData> = arrayListOf()
         fun anyoneStillUp(): Boolean {
-            lastCheck = ps()
-            return lastCheck.filter { it.state.running }.isNotEmpty()
+            lastCheck = ps().asList()
+            return lastCheck.any { it.state.running }
         }
         while (anyoneStillUp()) {
             Thread.sleep(100)
@@ -151,10 +152,11 @@ class DockerCompose private constructor(private val prefix: String,
         exec("rm --force")
     }
 
-    fun ps(): List<InspectData> {
+    fun ps(): PsResult {
         val psResults = exec("ps -q", EXEC_INFO_LOGGER)
         val containerIDs: List<String> = psResults.lines().filter { it.isNotEmpty() }
-        return Docker.inspect(*containerIDs.toTypedArray())
+        val inspectResult = Docker.inspect(*containerIDs.toTypedArray())
+        return PsResult(prefix, inspectResult)
     }
 
     fun getPrefix(): String {
