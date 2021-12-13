@@ -27,7 +27,10 @@ class DockerComposeKillTest extends Specification {
                 throw e
             }
         }
-        compose.rm() // TODO: Investigate this, seems to have no effect?
+
+        // rm appears to be flaky if ran too fast after the partially failed kill, sometimes not removing all containers.
+        Thread.sleep(1000)
+        compose.rm()
     }
 
     def 'kill single container'() {

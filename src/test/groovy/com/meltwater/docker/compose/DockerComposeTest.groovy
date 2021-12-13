@@ -1,6 +1,5 @@
 package com.meltwater.docker.compose
 
-import com.meltwater.docker.compose.data.InspectData
 import com.meltwater.docker.compose.data.PsResult
 import spock.lang.Shared
 import spock.lang.Specification
