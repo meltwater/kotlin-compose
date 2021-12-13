@@ -51,7 +51,7 @@ tasks {
     }
 
     register<Jar>("sourceJar") {
-        from(sourceSets.main.get().allJava)
+        from(sourceSets.main.get().allSource)
         archiveClassifier.set("sources")
     }
 
