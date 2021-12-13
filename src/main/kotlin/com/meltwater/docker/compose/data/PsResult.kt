@@ -4,12 +4,8 @@ class PsResult(prefix: String, private val rawResult: List<InspectData>) {
 
     private val result: Map<String, InspectData> = parse(prefix, rawResult)
 
-    fun getData(shortName: String): InspectData {
-        return result[shortName] ?: throw IllegalArgumentException("shortName not found: $shortName")
-    }
-
-    fun getContainerName(shortName: String): String {
-        return getData(shortName).name
+    fun getData(shortName: String): InspectData? {
+        return result[shortName]
     }
 
     fun asList(): List<InspectData> {

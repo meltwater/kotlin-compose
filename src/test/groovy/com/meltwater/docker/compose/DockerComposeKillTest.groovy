@@ -11,7 +11,7 @@ class DockerComposeKillTest extends Specification {
     private static DockerCompose compose
 
     void setupSpec() throws Exception {
-        compose = new DockerCompose("simple-busybox.yml", "composekilltest", new HashMap<String, String>())
+        compose = new DockerCompose("simple-busybox.yml", "composeKillTest", new HashMap<String, String>())
     }
 
     void cleanupSpec() throws Exception {
@@ -37,7 +37,7 @@ class DockerComposeKillTest extends Specification {
         given:
             def upResult = compose.up(Recreate.DEFAULT)
         when:
-            compose.kill(upResult.getContainerName("foo-1"))
+            compose.kill(upResult.getData("foo-1").name)
         then:
             PsResult inspectData = compose.ps()
             def foo = inspectData.getData("foo-1")

@@ -13,7 +13,6 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
-import java.util.HashMap
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.concurrent.thread
@@ -23,9 +22,14 @@ import kotlin.concurrent.thread
  *
  * After initialization it is possible to start, stop, inspect and kill the containers that are configured in the yaml file.
  */
-class DockerCompose private constructor(private val prefix: String,
-                                        private val env: HashMap<String, String>,
-                                        private val dockerComposeFilename: String) {
+class DockerCompose private constructor(
+    prefix: String,
+    private val env: HashMap<String, String>,
+    private val dockerComposeFilename: String
+) {
+
+    // docker-compose 2.2.2 seems to use lowercase internally and have issues with uppercase
+    private val prefix = prefix.lowercase()
 
     companion object {
 
