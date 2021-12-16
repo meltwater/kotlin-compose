@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.0.0 - 2021-12-16
 ### Changes
 - Now supports docker-compose v2, in addition to v1 which is still supported.
