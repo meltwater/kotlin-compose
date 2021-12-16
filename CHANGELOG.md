@@ -1,7 +1,12 @@
 # kotlin-compose
-## next
+## 2.0.0 - 2021-12-16
 ### Changes
-- No changes
+- Now supports docker-compose v2, in addition to v1 which is still supported.
+- Breaking change: `InspectData.name` has had its leading slash stripped, and now exactly matches the running container name. The raw response with leading slash is kept in `InspectData.rawName`.
+- Changes in docker-compose v2, and how they are handled:
+  - The naming scheme has been changed to use `-` instead of `_`. The new class `PsResult` parses both variants and normalizes them such that the consumers of this library don't need to know the underlying docker-compose version.
+  - There seems to be a bug with uppercase container names, so the `DockerCompose` prefix parameter is now being lowercased.
+  - Killing a container twice throws an exception. Up to the user to handle.
 
 ## 1.9.0 - 2021-10-14
 ### Changes
