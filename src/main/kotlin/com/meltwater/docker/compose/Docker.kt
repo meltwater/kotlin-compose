@@ -9,7 +9,16 @@ import com.meltwater.docker.compose.data.InspectData
 
 object Docker {
 
-    private var mapper: ObjectMapper = ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    private var mapper: ObjectMapper =
+        ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+    object System {
+        fun prune() = exec("system prune --force")
+
+        fun pruneAll() = exec("system prune --force --all")
+
+        fun pruneVolumes() = exec("system prune --force --volumes")
+    }
 
     fun kill(containerName: String) {
         exec("kill $containerName")
