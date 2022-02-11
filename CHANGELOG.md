@@ -1,7 +1,7 @@
 # kotlin-compose
-## next
+## 2.1.1 - 2022-02-11
 ### Changes
-- No changes
+- Fix for release versioning
 
 ## 2.1.0 - 2022-02-11
 ### Changes
