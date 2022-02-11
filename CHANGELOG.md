@@ -1,7 +1,7 @@
 # kotlin-compose
-## next
+## 2.1.0 - 2022-02-11
 ### Changes
-- No changes
+- Adds ability to prune unused system resources
 
 ## 2.0.0 - 2021-12-16
 ### Changes
