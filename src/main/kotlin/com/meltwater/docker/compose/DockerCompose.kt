@@ -201,7 +201,7 @@ class DockerCompose private constructor(
     private fun verifyDockerComposeInstallation() {
         try {
             val versionOutput = executeCommand("docker-compose --version")
-            val v: MatchResult? = Regex(".* (\\d+\\.\\d+\\.\\d+)").find(versionOutput)
+            val v: MatchResult? = Regex(".* v?(\\d+\\.\\d+\\.\\d+)").find(versionOutput)
             val version = v?.groups?.get(1)?.value
             if (MIN_DOCKER_COMPOSE_VERSION > DefaultArtifactVersion(version)) {
                 throw RuntimeException("The installed docker-compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
