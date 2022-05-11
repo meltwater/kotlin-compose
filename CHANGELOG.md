@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.1.2 - 2022-05-11
 ### Changes
 - Find newer docker-compose versions where the version string is prefixed with a v, eg v2.5.0
