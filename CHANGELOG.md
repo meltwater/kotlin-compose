@@ -1,7 +1,7 @@
 # kotlin-compose
-## next
+## 2.1.3 - 2023-03-30
 ### Changes
-- No changes
+- Fix discarding error message
 
 ## 2.1.2 - 2022-05-11
 ### Changes
