@@ -57,7 +57,7 @@ class ProcessWrapper(private val pb: ProcessBuilder, stdOutListener: (String) ->
                     line = buf.readLine()
                 } while (line != null)
             } catch (e: Exception) {
-                LOGGER.warn("$prefix Unexpected IO error.", e.message)
+                LOGGER.warn("$prefix Unexpected IO error.", e)
             }
         }
     }
