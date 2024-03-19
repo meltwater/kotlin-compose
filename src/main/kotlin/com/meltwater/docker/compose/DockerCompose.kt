@@ -136,7 +136,7 @@ class DockerCompose private constructor(
         if (quiet) {
             command.append(" --quiet")
         }
-        exec(command.toString(), EXEC_INFO_LOGGER, false)
+        exec(command.toString(), EXEC_INFO_LOGGER)
     }
 
     fun build() {
