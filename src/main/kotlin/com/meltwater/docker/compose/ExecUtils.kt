@@ -85,7 +85,7 @@ object ExecUtils {
 //            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
 
             if (process.waitFor() != 0) {
-                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
+                LOGGER.info("Failed to execute command {}", pb.command())
                 throw RuntimeException()
             } else {
                 LOGGER.trace("stdout: {}")
