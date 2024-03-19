@@ -80,4 +80,11 @@ class DockerComposeTest extends Specification {
         def dockerCompose = new DockerCompose("test-pull.yml", "pull_test", new HashMap<String, String>())
         dockerCompose.pull()
     }
+
+    def 'fail'() {
+        when:
+            def a = 0
+        then:
+            a > 0
+    }
 }

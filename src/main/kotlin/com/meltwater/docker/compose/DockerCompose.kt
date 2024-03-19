@@ -128,12 +128,14 @@ class DockerCompose private constructor(
         return ps
     }
 
-    fun pull(ignorePullFailures: Boolean = true) {
+    fun pull(ignorePullFailures: Boolean = true, quiet: Boolean = false) {
         val command = StringBuilder("pull")
         if (ignorePullFailures) {
             command.append(" --ignore-pull-failures")
         }
-        command.append(" --quiet")
+        if (quiet) {
+            command.append(" --quiet")
+        }
         exec(command.toString(), EXEC_INFO_LOGGER, false)
     }
 
