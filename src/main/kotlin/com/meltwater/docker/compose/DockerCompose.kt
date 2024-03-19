@@ -112,10 +112,11 @@ class DockerCompose private constructor(
         saveEnvironmentFile(env, fileNamePrefix + ENVIRONMENT_FILE_EXTENSION)
     }
 
-    fun up(): PsResult = up(Recreate.DEFAULT)
-
-    fun up(recreate: Recreate = DEFAULT): PsResult {
-        exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
+    @JvmOverloads
+    fun up(recreate: Recreate = DEFAULT, pullPolicy: PullPolicy? = null, quietPull: Boolean = false): PsResult {
+        val pullPolicyFlag = getPullPolicyFlag(pullPolicy)
+        val quietPullFlag = getQuietPullFlag(quietPull)
+        exec("up -d ${recreate.commandLine}$pullPolicyFlag$quietPullFlag", EXEC_INFO_LOGGER)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
         val ps: PsResult = ps()
@@ -127,8 +128,16 @@ class DockerCompose private constructor(
         return ps
     }
 
-    fun pull() {
-        exec("pull --ignore-pull-failures", EXEC_INFO_LOGGER)
+    private fun getPullPolicyFlag(pullPolicy: PullPolicy?) = if (pullPolicy != null) {
+        " --pull ${pullPolicy.commandLine}"
+    } else {
+        ""
+    }
+
+    private fun getQuietPullFlag(quietPull: Boolean) = if (quietPull) {
+        " --quiet-pull"
+    } else {
+        ""
     }
 
     fun build() {
