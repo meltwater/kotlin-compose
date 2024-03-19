@@ -57,8 +57,8 @@ object ExecUtils {
         return executeCommand(command, hashMapOf(), NOOP_CONSUMER)
     }
 
-    fun executeCommand(command: String, env: HashMap<String, String>, listener: (String) -> Unit): String {
-        return execLocal(adjustForOs(command), env, listener)
+    fun executeCommand(command: String, env: HashMap<String, String>, listener: (String) -> Unit, streamOutput: Boolean = false): String {
+        return execLocal(adjustForOs(command), env, listener, streamOutput)
     }
 
     fun executeCommandAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
@@ -69,28 +69,32 @@ object ExecUtils {
         return execLocal(command, hashMapOf(), NOOP_CONSUMER)
     }
 
-    fun execLocal(command: String, env: HashMap<String, String>, listener: (String) -> Unit): String {
+    fun execLocal(command: String, env: HashMap<String, String>, listener: (String) -> Unit, streamOutput: Boolean = false): String {
         try {
             val commands = ArrayList<String>()
             commands.add("sh")
             commands.add("-c")
             commands.add(command)
 
-            val pb = ProcessBuilder(commands).inheritIO()
+            val pb = ProcessBuilder(commands)
+            if (streamOutput) {
+                pb.inheritIO()
+            }
             pb.environment().putAll(env)
             LOGGER.info("Running: ${pb.command()} \n with env $env")
 
             val process = pb.start()
-//            val result = collectOutput(process.inputStream, listener)
-//            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
+
+            val result = if (streamOutput) "" else collectOutput(process.inputStream, listener)
+            val errors = if (streamOutput) "" else IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
 
             if (process.waitFor() != 0) {
-                LOGGER.info("Failed to execute command {}", pb.command())
-                throw RuntimeException()
+                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
+                throw RuntimeException(errors)
             } else {
-                LOGGER.trace("stdout: {}")
+                LOGGER.trace("stdout: {}", result)
             }
-            return ""
+            return result
         } catch (e: IOException) {
             throw RuntimeException(e)
         } catch (e: InterruptedException) {
