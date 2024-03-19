@@ -116,7 +116,7 @@ class DockerCompose private constructor(
     fun up(): PsResult = up(Recreate.DEFAULT)
 
     fun up(recreate: Recreate = DEFAULT): PsResult {
-        exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER, true)
+        exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER, false)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
         val ps: PsResult = ps()
@@ -133,7 +133,8 @@ class DockerCompose private constructor(
         if (ignorePullFailures) {
             command.append(" --ignore-pull-failures")
         }
-        exec(command.toString(), EXEC_INFO_LOGGER, true)
+        command.append(" --quiet")
+        exec(command.toString(), EXEC_INFO_LOGGER, false)
     }
 
     fun build() {
