@@ -76,21 +76,21 @@ object ExecUtils {
             commands.add("-c")
             commands.add(command)
 
-            val pb = ProcessBuilder(commands)
+            val pb = ProcessBuilder(commands).inheritIO()
             pb.environment().putAll(env)
             LOGGER.info("Running: ${pb.command()} \n with env $env")
 
             val process = pb.start()
-            val result = collectOutput(process.inputStream, listener)
-            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
+//            val result = collectOutput(process.inputStream, listener)
+//            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
 
             if (process.waitFor() != 0) {
                 LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
-                throw RuntimeException(errors)
+                throw RuntimeException()
             } else {
-                LOGGER.trace("stdout: {}", result)
+                LOGGER.trace("stdout: {}")
             }
-            return result
+            return ""
         } catch (e: IOException) {
             throw RuntimeException(e)
         } catch (e: InterruptedException) {
