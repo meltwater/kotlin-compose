@@ -136,7 +136,10 @@ class DockerCompose private constructor(
         if (quiet) {
             command.append(" --quiet")
         }
-        command.append(pullPolicy.commandLine)
+        if (pullPolicy.commandLine.isNotEmpty()) {
+            command.append(" --policy ")
+            command.append(pullPolicy.commandLine)
+        }
         exec(command.toString(), EXEC_INFO_LOGGER)
     }
 
