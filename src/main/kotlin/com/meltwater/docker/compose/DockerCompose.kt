@@ -116,7 +116,7 @@ class DockerCompose private constructor(
     fun up(): PsResult = up(Recreate.DEFAULT)
 
     fun up(recreate: Recreate = DEFAULT): PsResult {
-        exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER, false)
+        exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
         val ps: PsResult = ps()
@@ -128,7 +128,7 @@ class DockerCompose private constructor(
         return ps
     }
 
-    fun pull(ignorePullFailures: Boolean = true, quiet: Boolean = false) {
+    fun pull(pullPolicy: PullPolicy = PullPolicy.DEFAULT, ignorePullFailures: Boolean = true, quiet: Boolean = false) {
         val command = StringBuilder("pull")
         if (ignorePullFailures) {
             command.append(" --ignore-pull-failures")
@@ -136,6 +136,7 @@ class DockerCompose private constructor(
         if (quiet) {
             command.append(" --quiet")
         }
+        command.append(pullPolicy.commandLine)
         exec(command.toString(), EXEC_INFO_LOGGER)
     }
 
@@ -183,8 +184,8 @@ class DockerCompose private constructor(
         return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, NOOP_CONSUMER)
     }
 
-    private fun exec(command: String, listener: (String) -> Unit, streamOutput: Boolean = false): String {
-        return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, listener, streamOutput)
+    private fun exec(command: String, listener: (String) -> Unit): String {
+        return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, listener)
     }
 
     private fun execAsync(command: String, stdOut: (String) -> Unit, stdErr: (String) -> Unit): ProcessWrapper {
