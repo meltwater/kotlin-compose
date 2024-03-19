@@ -10,12 +10,14 @@ import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.lang.StringBuilder
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.concurrent.thread
+import kotlin.text.StringBuilder
 
 /**
  * This class takes a path to a docker-compose yaml file and copies it to a temporary location when initialized.
@@ -127,8 +129,12 @@ class DockerCompose private constructor(
         return ps
     }
 
-    fun pull() {
-        exec("pull --ignore-pull-failures", EXEC_INFO_LOGGER)
+    fun pull(ignorePullFailures: Boolean = true) {
+        val command = StringBuilder("pull")
+        if (ignorePullFailures) {
+            command.append(" --ignore-pull-failures")
+        }
+        exec(command.toString(), EXEC_INFO_LOGGER)
     }
 
     fun build() {
