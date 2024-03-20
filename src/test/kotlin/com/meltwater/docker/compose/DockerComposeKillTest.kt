@@ -43,7 +43,7 @@ class DockerComposeKillTest {
             val bar = inspectData.getData("bar-1")!!
             val barHost = inspectData.getData("bar-host-1")!!
 
-            assertThat(foo?.state?.running ?: false).isFalse()
+            assertThat(foo).isNull()
             assertThat(bar.state.running).isTrue()
             assertThat(barHost.state.running).isTrue()
     }
