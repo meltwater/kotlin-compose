@@ -16,6 +16,4 @@ services:
     image: busybox:1.24.1
     command: sh -c "while true; do sleep 1; done"
     network_mode: "host"
-    ports:
-      - "38080:8080"
-      - "38081:8081"
+

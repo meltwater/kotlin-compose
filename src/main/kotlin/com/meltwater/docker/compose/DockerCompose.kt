@@ -16,6 +16,7 @@ import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.concurrent.thread
+import kotlin.text.StringBuilder
 
 /**
  * This class takes a path to a docker-compose yaml file and copies it to a temporary location when initialized.
@@ -114,7 +115,7 @@ class DockerCompose private constructor(
 
     fun up(): PsResult = up(Recreate.DEFAULT)
 
-    fun up(recreate: Recreate = DEFAULT): PsResult {
+    fun up(recreate: Recreate = DEFAULT, pullPolicy: PullPolicy = PullPolicy.DEFAULT): PsResult {
         exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
@@ -127,8 +128,19 @@ class DockerCompose private constructor(
         return ps
     }
 
-    fun pull() {
-        exec("pull --ignore-pull-failures", EXEC_INFO_LOGGER)
+    fun pull(pullPolicy: PullPolicy = PullPolicy.DEFAULT, ignorePullFailures: Boolean = true, quiet: Boolean = false) {
+        val command = StringBuilder("pull")
+        if (ignorePullFailures) {
+            command.append(" --ignore-pull-failures")
+        }
+        if (quiet) {
+            command.append(" --quiet")
+        }
+        if (pullPolicy.commandLine.isNotEmpty()) {
+            command.append(" --policy ")
+            command.append(pullPolicy.commandLine)
+        }
+        exec(command.toString(), EXEC_INFO_LOGGER)
     }
 
     fun build() {
@@ -157,7 +169,7 @@ class DockerCompose private constructor(
     }
 
     fun ps(): PsResult {
-        val psResults = exec("ps -q", EXEC_INFO_LOGGER)
+        val psResults = exec("ps -q -a", EXEC_INFO_LOGGER)
         val containerIDs: List<String> = psResults.lines().filter { it.isNotEmpty() }
         val inspectResult = Docker.inspect(*containerIDs.toTypedArray())
         return PsResult(prefix, inspectResult)
