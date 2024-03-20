@@ -3,7 +3,6 @@ import java.net.URI
 import java.net.URL
 
 plugins {
-    groovy
     kotlin("jvm") version "1.5.31"
     id("maven-publish")
     id("org.jetbrains.dokka") version "1.5.30"
@@ -34,8 +33,10 @@ dependencies {
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.apache.maven:maven-artifact:3.8.2")
 
-    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
     testImplementation("ch.qos.logback:logback-classic:1.2.6")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testImplementation("org.assertj:assertj-core:3.25.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
 tasks {
@@ -67,6 +68,10 @@ tasks {
     // This is needed due to Jenkins using "artifactoryPublish" in scripts instead of publish.
     register("artifactoryPublish") {
         dependsOn(publish)
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }
 

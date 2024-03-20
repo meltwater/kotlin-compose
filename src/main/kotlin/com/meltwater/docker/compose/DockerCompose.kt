@@ -115,7 +115,7 @@ class DockerCompose private constructor(
 
     fun up(): PsResult = up(Recreate.DEFAULT)
 
-    fun up(recreate: Recreate = DEFAULT): PsResult {
+    fun up(recreate: Recreate = DEFAULT, pullPolicy: PullPolicy = PullPolicy.DEFAULT): PsResult {
         exec("up -d ${recreate.commandLine}", EXEC_INFO_LOGGER)
         val logCmd = execAsync("logs -f", STDOUT_LOG_CONSUMER, STDERR_LOG_CONSUMER)
         forwardDockerLog(logCmd)
