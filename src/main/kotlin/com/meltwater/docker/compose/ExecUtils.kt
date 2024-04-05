@@ -1,5 +1,6 @@
 package com.meltwater.docker.compose
 
+import com.meltwater.docker.compose.data.ProcessResult
 import com.meltwater.docker.compose.data.StreamReader
 import org.apache.commons.lang3.SystemUtils
 import org.slf4j.Logger
@@ -74,32 +75,40 @@ object ExecUtils {
             pb.environment().putAll(env)
             LOGGER.info("Running: ${pb.command()} \n with env $env")
 
-            val process = pb.start()
-            val stdoutReader = StreamReader(process.inputStream, listener)
-            val stderrReader = StreamReader(process.errorStream) {}
-            val stdoutThread = Thread(stdoutReader)
-            val stderrThread = Thread(stderrReader)
-            stdoutThread.start()
-            stderrThread.start()
+            val result = execProcessWithCapturedOutput(pb, listener)
 
-            val commandExitCode = process.waitFor()
-
-            stderrThread.join()
-            stdoutThread.join()
-            val result = stdoutReader.getData()
-            val errors = stderrReader.getData()
-            if (commandExitCode != 0) {
+            if (result.exitCode != 0) {
                 LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
-                throw RuntimeException(errors)
+                throw RuntimeException(result.errorOutput)
             } else {
                 LOGGER.trace("stdout: {}", result)
             }
-            return result
+            return result.standardOutput
         } catch (e: IOException) {
             throw RuntimeException(e)
         } catch (e: InterruptedException) {
             throw RuntimeException(e)
         }
+    }
+
+    private fun execProcessWithCapturedOutput(pb: ProcessBuilder, listener: (String) -> Unit): ProcessResult {
+        val process = pb.start()
+
+        val stdoutReader = StreamReader(process.inputStream, listener)
+        val stderrReader = StreamReader(process.errorStream) {}
+
+        val stdoutThread = Thread(stdoutReader)
+        val stderrThread = Thread(stderrReader)
+        stdoutThread.start()
+        stderrThread.start()
+
+        val commandExitCode = process.waitFor()
+        stderrThread.join()
+        stdoutThread.join()
+        val result = stdoutReader.getData()
+        val errors = stderrReader.getData()
+
+        return ProcessResult(commandExitCode, result, errors)
     }
 
     fun execLocalAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
