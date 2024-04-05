@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicLong
 
 class StreamReader(private val stream: InputStream, val listener: (String) -> Unit) : Runnable {
 
-    val out = StringBuilder()
-    val completed = AtomicBoolean(false)
+    private val out = StringBuilder()
+    private val completed = AtomicBoolean(false)
 
     override fun run() {
         val buf: BufferedReader = stream.bufferedReader(Charsets.UTF_8)
