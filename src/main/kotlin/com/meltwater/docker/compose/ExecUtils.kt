@@ -78,7 +78,7 @@ object ExecUtils {
             val result = execProcessWithCapturedOutput(pb, listener)
 
             if (result.exitCode != 0) {
-                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
+                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), result.errorOutput, result.standardOutput)
                 throw RuntimeException(result.errorOutput)
             } else {
                 LOGGER.trace("stdout: {}", result)
