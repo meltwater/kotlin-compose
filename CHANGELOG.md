@@ -1,7 +1,7 @@
 # kotlin-compose
-## next
+## 2.1.4 - 2024-04-09
 ### Changes
-- No changes
+- Consume stdout/err from process in separate threads.
 
 ## 2.1.3 - 2023-03-30
 ### Changes
