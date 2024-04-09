@@ -157,7 +157,7 @@ class DockerCompose private constructor(
     }
 
     fun ps(): PsResult {
-        val psResults = exec("ps -q", EXEC_INFO_LOGGER)
+        val psResults = exec("ps -q -a", EXEC_INFO_LOGGER)
         val containerIDs: List<String> = psResults.lines().filter { it.isNotEmpty() }
         val inspectResult = Docker.inspect(*containerIDs.toTypedArray())
         return PsResult(prefix, inspectResult)
