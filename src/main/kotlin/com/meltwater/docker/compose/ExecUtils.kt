@@ -1,17 +1,12 @@
 package com.meltwater.docker.compose
 
-import org.apache.commons.io.IOUtils
+import com.meltwater.docker.compose.data.ProcessResult
+import com.meltwater.docker.compose.data.StreamReader
 import org.apache.commons.lang3.SystemUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.BufferedReader
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.nio.charset.Charset
-import java.util.ArrayList
-import java.util.HashMap
-import kotlin.text.Charsets.UTF_8
 
 object ExecUtils {
 
@@ -80,17 +75,15 @@ object ExecUtils {
             pb.environment().putAll(env)
             LOGGER.info("Running: ${pb.command()} \n with env $env")
 
-            val process = pb.start()
-            val result = collectOutput(process.inputStream, listener)
-            val errors = IOUtils.toString(process.errorStream, Charset.forName("utf-8"))
+            val result = execProcessWithCapturedOutput(pb, listener)
 
-            if (process.waitFor() != 0) {
-                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), errors, result)
-                throw RuntimeException(errors)
+            if (result.exitCode != 0) {
+                LOGGER.info("Failed to execute command {}.\nstderr: {}\nstdout: {}", pb.command(), result.errorOutput, result.standardOutput)
+                throw RuntimeException(result.errorOutput)
             } else {
                 LOGGER.trace("stdout: {}", result)
             }
-            return result
+            return result.standardOutput
         } catch (e: IOException) {
             throw RuntimeException(e)
         } catch (e: InterruptedException) {
@@ -98,18 +91,24 @@ object ExecUtils {
         }
     }
 
-    private fun collectOutput(inputStream: InputStream, listener: (String) -> Unit): String {
-        val out = StringBuilder()
-        val buf: BufferedReader = inputStream.bufferedReader(UTF_8)
-        var line: String? = buf.readLine()
-        do {
-            if (line != null) {
-                out.append(line).append("\n")
-                listener(line)
-            }
-            line = buf.readLine()
-        } while (line != null)
-        return out.toString()
+    private fun execProcessWithCapturedOutput(pb: ProcessBuilder, listener: (String) -> Unit): ProcessResult {
+        val process = pb.start()
+
+        val stdoutReader = StreamReader(process.inputStream, listener)
+        val stderrReader = StreamReader(process.errorStream) {}
+
+        val stdoutThread = Thread(stdoutReader)
+        val stderrThread = Thread(stderrReader)
+        stdoutThread.start()
+        stderrThread.start()
+
+        val commandExitCode = process.waitFor()
+        stderrThread.join()
+        stdoutThread.join()
+        val result = stdoutReader.getData()
+        val errors = stderrReader.getData()
+
+        return ProcessResult(commandExitCode, result, errors)
     }
 
     fun execLocalAsync(command: String, env: HashMap<String, String>, stdOutListener: (String) -> Unit, stdErrListener: (String) -> Unit): ProcessWrapper {
