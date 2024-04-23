@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.2.0 - 2024-04-23
 ### Changes
 - Add support to set pull policy in up command
