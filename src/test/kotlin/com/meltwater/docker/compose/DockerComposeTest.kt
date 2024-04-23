@@ -1,6 +1,5 @@
 package com.meltwater.docker.compose
 
-import com.meltwater.docker.compose.data.PsResult
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -70,5 +69,23 @@ class DockerComposeTest {
         assertThat(inspectData.asList()).hasSize(3)
         assertThat(bar.bindingForTcpPort("8080")).isNotEmpty()
         assertThat(foo.bindingForTcpPort("9090")).isNotEmpty()
+    }
+
+    @Test
+    fun `can set pull policy to never`() {
+        val result = compose.up (Recreate.DEFAULT, pullPolicy = PullPolicy.NEVER)
+        assertThat(result.asList()).hasSize(3)
+    }
+
+    @Test
+    fun `can set pull policy to always`() {
+        val result = compose.up (Recreate.DEFAULT, pullPolicy = PullPolicy.ALWAYS)
+        assertThat(result.asList()).hasSize(3)
+    }
+
+    @Test
+    fun `can set quiet pull flag`() {
+        val result = compose.up (Recreate.DEFAULT, quietPull = true)
+        assertThat(result.asList()).hasSize(3)
     }
 }
