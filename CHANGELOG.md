@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.3.0 - 2024-05-08
 ### Changes
 - Bumped dependencies
