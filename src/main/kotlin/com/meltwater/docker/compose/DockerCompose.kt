@@ -11,11 +11,13 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.concurrent.thread
+
 
 /**
  * This class takes a path to a docker-compose yaml file and copies it to a temporary location when initialized.
@@ -55,21 +57,44 @@ class DockerCompose private constructor(
 
         private val ENVIRONMENT_VARIABLE_SEPARATOR = Pattern.compile("=")
 
-        private fun initializeNewDockerComposeSession(classPathYmlResource: String, env: HashMap<String, String>): String {
+        private val dockerCompose: String = findDockerCompose("docker-compose")?.toString() ?: "docker compose"
+
+        private fun findDockerCompose(name: String): Path? {
+            val pathSeparator = System.getProperty("path.separator")
+            val rawPath = System.getenv("PATH")
+            LOGGER.debug("Looking for executable in path. {}={}, {}={}", "executable", name, "path", rawPath)
+            val path = rawPath.split(pathSeparator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            return path
+                .map { pathEntry: String ->
+                    Paths.get(
+                        pathEntry,
+                        name
+                    )
+                }.firstOrNull {
+                    Files.exists(it)
+                }
+        }
+
+        private fun initializeNewDockerComposeSession(
+            classPathYmlResource: String,
+            env: HashMap<String, String>
+        ): String {
             val composeFile = File.createTempFile(classPathYmlResource, YAML_FILE_EXTENSION)
             val dockerComposeFilename = composeFile.absolutePath
             saveResourceToTmpFolder(classPathYmlResource, composeFile)
             if (!composeFile.exists()) {
                 throw RuntimeException("File $dockerComposeFilename could not be found.")
             }
-            val environmentFileName = dockerComposeFilename.substringBeforeLast(YAML_FILE_EXTENSION) + ENVIRONMENT_FILE_EXTENSION
+            val environmentFileName =
+                dockerComposeFilename.substringBeforeLast(YAML_FILE_EXTENSION) + ENVIRONMENT_FILE_EXTENSION
             saveEnvironmentFile(env, environmentFileName)
             return dockerComposeFilename
         }
 
         private fun saveResourceToTmpFolder(classPathYmlResource: String, destinationFile: File) {
             try {
-                DockerCompose::class.java.classLoader.getResourceAsStream(classPathYmlResource).copyTo(destinationFile.outputStream())
+                DockerCompose::class.java.classLoader.getResourceAsStream(classPathYmlResource)
+                    .copyTo(destinationFile.outputStream())
             } catch (ex: Exception) {
                 throw RuntimeException("Could not load yml file from classpath: $classPathYmlResource", ex)
             }
@@ -78,7 +103,13 @@ class DockerCompose private constructor(
         private fun saveEnvironmentFile(env: HashMap<String, String>, environmentFileName: String) {
             val environmentPath = Paths.get(environmentFileName)
             val environment = env.entries.joinToString("\n") { "${it.key}=${it.value}" }
-            Files.write(environmentPath, environment.toByteArray(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE, StandardOpenOption.CREATE)
+            Files.write(
+                environmentPath,
+                environment.toByteArray(),
+                StandardOpenOption.TRUNCATE_EXISTING,
+                StandardOpenOption.WRITE,
+                StandardOpenOption.CREATE
+            )
         }
 
         private fun loadEnvironmentFile(fileNamePrefix: String): HashMap<String, String> {
@@ -88,12 +119,12 @@ class DockerCompose private constructor(
                 return hashMapOf()
             }
             val env: Map<String, String> = Files.lines(environmentPath)
-                    .map { it.trim() }
-                    .filter { !it.startsWith("#") }
-                    .filter { it.isNotBlank() }
-                    .map { it.split(ENVIRONMENT_VARIABLE_SEPARATOR, 2) }
-                    .filter { it.size == 2 }
-                    .collect(Collectors.toMap({ it[0] }, { it[1] }))
+                .map { it.trim() }
+                .filter { !it.startsWith("#") }
+                .filter { it.isNotBlank() }
+                .map { it.split(ENVIRONMENT_VARIABLE_SEPARATOR, 2) }
+                .filter { it.size == 2 }
+                .collect(Collectors.toMap({ it[0] }, { it[1] }))
             return HashMap(env)
         }
 
@@ -103,11 +134,24 @@ class DockerCompose private constructor(
         verifyDockerComposeInstallation()
     }
 
-    constructor(classPathYmlResource: String, applicationPrefix: String, env: HashMap<String, String>) : this(applicationPrefix, env, initializeNewDockerComposeSession(classPathYmlResource, env))
+    constructor(classPathYmlResource: String, applicationPrefix: String, env: HashMap<String, String>) : this(
+        applicationPrefix,
+        env,
+        initializeNewDockerComposeSession(classPathYmlResource, env)
+    )
 
-    constructor(applicationPrefix: String, fileNamePrefix: String) : this(applicationPrefix, loadEnvironmentFile(fileNamePrefix), fileNamePrefix + YAML_FILE_EXTENSION)
+    constructor(applicationPrefix: String, fileNamePrefix: String) : this(
+        applicationPrefix,
+        loadEnvironmentFile(fileNamePrefix),
+        fileNamePrefix + YAML_FILE_EXTENSION
+    )
 
-    constructor(classPathYmlResource: String, applicationPrefix: String, fileNamePrefix: String, env: HashMap<String, String>) : this(applicationPrefix, env, fileNamePrefix + YAML_FILE_EXTENSION) {
+    constructor(
+        classPathYmlResource: String,
+        applicationPrefix: String,
+        fileNamePrefix: String,
+        env: HashMap<String, String>
+    ) : this(applicationPrefix, env, fileNamePrefix + YAML_FILE_EXTENSION) {
         saveResourceToTmpFolder(classPathYmlResource, File(fileNamePrefix + YAML_FILE_EXTENSION))
         saveEnvironmentFile(env, fileNamePrefix + ENVIRONMENT_FILE_EXTENSION)
     }
@@ -121,7 +165,7 @@ class DockerCompose private constructor(
         forwardDockerLog(logCmd)
         val ps: PsResult = ps()
         val deadServices = ps.asList().filter { it.state.dead || !it.state.running }
-                .filter { !it.name.contains("puppy") }
+            .filter { !it.name.contains("puppy") }
         if (deadServices.isNotEmpty()) {
             throw RuntimeException("Failed to start up all containers, the dead services are: ${deadServices.map { it.name }}")
         }
@@ -181,15 +225,28 @@ class DockerCompose private constructor(
     }
 
     private fun exec(command: String): String {
-        return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, NOOP_CONSUMER)
+        return executeCommand(
+            "$dockerCompose --project-name $prefix --file $dockerComposeFilename $command",
+            env,
+            NOOP_CONSUMER
+        )
     }
 
     private fun exec(command: String, listener: (String) -> Unit): String {
-        return executeCommand("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, listener)
+        return executeCommand(
+            "$dockerCompose --project-name $prefix --file $dockerComposeFilename $command",
+            env,
+            listener
+        )
     }
 
     private fun execAsync(command: String, stdOut: (String) -> Unit, stdErr: (String) -> Unit): ProcessWrapper {
-        return executeCommandAsync("docker-compose --project-name $prefix --file $dockerComposeFilename $command", env, stdOut, stdErr)
+        return executeCommandAsync(
+            "$dockerCompose --project-name $prefix --file $dockerComposeFilename $command",
+            env,
+            stdOut,
+            stdErr
+        )
     }
 
     private fun forwardDockerLog(procLogger: ProcessWrapper) {
@@ -209,16 +266,22 @@ class DockerCompose private constructor(
 
     private fun verifyDockerComposeInstallation() {
         try {
-            val versionOutput = executeCommand("docker-compose --version")
+            val versionOutput = if (dockerCompose == "docker compose") {
+                executeCommand("$dockerCompose version")
+            } else {
+                executeCommand("$dockerCompose --version")
+            }
             val v: MatchResult? = Regex(".* v?(\\d+\\.\\d+\\.\\d+)").find(versionOutput)
             val version = v?.groups?.get(1)?.value
             if (MIN_DOCKER_COMPOSE_VERSION > DefaultArtifactVersion(version)) {
-                throw RuntimeException("The installed docker-compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
+                throw RuntimeException("The installed Docker Compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
             }
         } catch (e: Exception) {
-            throw RuntimeException("Unable to determine the docker-compose version. " +
-                    "Please make sure it's installed and available to the user. " +
-                    "The version should be at least $MIN_DOCKER_COMPOSE_VERSION", e)
+            throw RuntimeException(
+                "Unable to determine the Docker Compose version. " +
+                        "Please make sure it's installed and available to the user. " +
+                        "The version should be at least $MIN_DOCKER_COMPOSE_VERSION", e
+            )
         }
 
     }
