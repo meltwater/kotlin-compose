@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.4.0 - 2024-11-08
 ### Changes
 - Add support for running docker-compose as a Docker CLI plugin, if docker-compose binary is not found in ${PATH}.
