@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.4.1 - 2024-11-12
 ### Changes
 - Test cases pulls a container image with non deprecated container image manifest
