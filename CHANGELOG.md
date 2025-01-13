@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 2.5.0 - 2025-01-13
 ### Changes
 - Bumped dependencies in order to align with spring boot 3.2.12
