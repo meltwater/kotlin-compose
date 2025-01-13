@@ -22,7 +22,7 @@ configurations {
             eachDependency {
                 // This is needed in order to sync with what's defined in waldo
                 if(requested.group.startsWith("com.fasterxml.jackson"))
-                    useVersion("2.14.3")
+                    useVersion("2.15.4")
             }
         }
     }
@@ -30,17 +30,17 @@ configurations {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.slf4j:slf4j-api:2.0.9")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.14.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.3")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.4")
+    implementation("org.apache.commons:commons-lang3:3.13.0")
+    implementation("commons-io:commons-io:2.14.0")
     implementation("org.apache.maven:maven-artifact:3.8.2")
 
-    testImplementation("ch.qos.logback:logback-classic:1.4.12")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testImplementation("ch.qos.logback:logback-classic:1.4.14")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.5")
     testImplementation("org.assertj:assertj-core:3.25.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.5")
 }
 
 tasks {
