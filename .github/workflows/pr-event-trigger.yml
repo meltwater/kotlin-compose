@@ -1,0 +1,25 @@
+name: PR Event Trigger
+
+on:
+  pull_request:
+    types:
+      - opened
+      - labeled
+      - closed
+
+jobs:
+  notify_slack:
+    if: |
+      github.event.action == 'opened' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'Ready to Review') || 
+      (github.event.action == 'closed' && github.event.pull_request.merged == true)
+    uses:  meltwater/platform-github-repos/.github/workflows/pr-slack-notification.yml
+    with:
+      pr_url: ${{ github.event.pull_request.html_url }}
+      pr_title: ${{ github.event.pull_request.title }}
+      pr_author: ${{ github.event.pull_request.user.login }}
+      repo_name: ${{ github.repository }}
+      pr_heading: ${{ github.event.action == 'opened' && '🚀 New Pull Request Opened!' ||
+                      github.event.action == 'labeled' && '✅ PR Ready for Review!' ||
+                      github.event.action == 'closed' && '🎉 PR Merged!' }}
+    secrets: inherit
