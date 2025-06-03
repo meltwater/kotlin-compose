@@ -13,7 +13,7 @@ jobs:
       github.event.action == 'opened' ||
       (github.event.action == 'labeled' && github.event.label.name == 'Ready to Review') || 
       (github.event.action == 'closed' && github.event.pull_request.merged == true)
-    uses:  meltwater/platform-github-repos/.github/workflows/pr-slack-notification.yml
+    uses:  meltwater/platform-github-repos/.github/workflows/pr-slack-notification.yml@main
     with:
       pr_url: ${{ github.event.pull_request.html_url }}
       pr_title: ${{ github.event.pull_request.title }}
