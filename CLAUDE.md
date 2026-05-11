@@ -1,5 +1,11 @@
 # CLAUDE.md
 
+<!-- horace-rules:start -->
+@~/.claude/horace/rules/horace-project-conventions.md
+@~/.claude/horace/rules/tech-stack.md
+@~/.claude/horace/rules/engineering-standards.md
+<!-- horace-rules:end -->
+
 ## Project Overview
 
 `kotlin-compose` is a Kotlin library maintained by Team Horace that wraps Docker Compose for the JVM, intended primarily for embedded integration tests. It manages the lifecycle of Docker Compose environments (start, stop, inspect) from within JVM test code.
