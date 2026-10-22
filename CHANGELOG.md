@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Upgraded to Kotlin 2.2.21 and Gradle 8.14, and bumped dependencies to align with platform-common-dependencies (Spring Boot 4.0.8): Jackson 2.21.5, JUnit 6.0.3
 
 ## 2.5.0 - 2025-01-13
 ### Changes
