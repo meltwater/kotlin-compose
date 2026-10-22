@@ -3,9 +3,9 @@ import java.net.URI
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "2.2.21"
     id("maven-publish")
-    id("org.jetbrains.dokka") version "1.9.20"
+    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 project.group = "com.meltwater.docker"
@@ -20,9 +20,9 @@ configurations {
     all {
         resolutionStrategy {
             eachDependency {
-                // This is needed in order to sync with what's defined in waldo
-                if(requested.group.startsWith("com.fasterxml.jackson"))
-                    useVersion("2.15.4")
+                // Align with platform-common-dependencies. jackson-annotations is versioned without a patch number since 2.20
+                if(requested.group.startsWith("com.fasterxml.jackson") && requested.name != "jackson-annotations")
+                    useVersion("2.21.5")
             }
         }
     }
@@ -30,17 +30,18 @@ configurations {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.15.4")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.4")
-    implementation("org.apache.commons:commons-lang3:3.13.0")
-    implementation("commons-io:commons-io:2.14.0")
+    implementation("org.slf4j:slf4j-api:2.0.18")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.21.5")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.5")
+    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("commons-io:commons-io:2.21.0")
     implementation("org.apache.maven:maven-artifact:3.8.2")
 
-    testImplementation("ch.qos.logback:logback-classic:1.4.14")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.5")
-    testImplementation("org.assertj:assertj-core:3.25.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.5")
+    testImplementation("ch.qos.logback:logback-classic:1.5.38")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testImplementation("org.assertj:assertj-core:3.27.7")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
 }
 
 tasks {
