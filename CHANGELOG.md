@@ -1,6 +1,10 @@
 # kotlin-compose
 ## next
 ### Changes
+- No changes
+
+## 3.0.0 - 2026-10-22
+### Changes
 - Upgraded to Kotlin 2.2.21 and Gradle 8.14, and bumped dependencies to align with platform-common-dependencies (Spring Boot 4.0.8): Jackson 2.21.5, JUnit 6.0.3
 - Fixed a deadlock on macOS with Docker Desktop, where the first use of kotlin-compose hung forever (introduced in 3.0.0)
 - Removed docker-machine support (docker-machine was archived in 2021); any `docker` CLI context works, e.g. Docker Desktop, Colima, OrbStack
