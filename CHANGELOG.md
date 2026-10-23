@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Cleanup mac specific methods, to prevent stalls
 
 ## 3.0.0 - 2026-10-22
 ### Changes
