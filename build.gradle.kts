@@ -3,7 +3,7 @@ import java.net.URI
 import java.net.URL
 
 plugins {
-    kotlin("jvm") version "2.2.21"
+    kotlin("jvm") version "2.3.21"
     id("maven-publish")
     id("org.jetbrains.dokka") version "2.0.0"
 }
@@ -22,7 +22,7 @@ configurations {
             eachDependency {
                 // Align with platform-common-dependencies. jackson-annotations is versioned without a patch number since 2.20
                 if(requested.group.startsWith("com.fasterxml.jackson") && requested.name != "jackson-annotations")
-                    useVersion("2.21.5")
+                    useVersion("2.21.7")
             }
         }
     }
@@ -30,9 +30,9 @@ configurations {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    implementation("org.slf4j:slf4j-api:2.0.18")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.5")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.5")
+    implementation("org.slf4j:slf4j-api:2.0.20")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.21.7")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.7")
     implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("commons-io:commons-io:2.21.0")
     implementation("org.apache.maven:maven-artifact:3.8.2")
