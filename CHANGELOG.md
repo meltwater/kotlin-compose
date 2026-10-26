@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Upgraded to Kotlin 2.3.21 and bumped dependencies to align with platform-common-dependencies (Spring Boot 4.1.2): Jackson 2.21.7, slf4j 2.0.20
 
 ## 3.0.1 - 2026-10-23
 ### Changes

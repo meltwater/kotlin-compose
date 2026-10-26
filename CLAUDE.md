@@ -10,7 +10,7 @@
 
 `kotlin-compose` is a Kotlin library maintained by Team Horace that wraps Docker Compose for the JVM, intended primarily for embedded integration tests. It manages the lifecycle of Docker Compose environments (start, stop, inspect) from within JVM test code.
 
-**Tech Stack**: Kotlin 2.2, JDK 21, Gradle (standalone, not Waldo-based), Jackson 2.21, SLF4J, Apache Commons Lang3/IO, Maven Artifact (version comparison)
+**Tech Stack**: Kotlin 2.3, JDK 21, Gradle (standalone, not Waldo-based), Jackson 2.21, SLF4J, Apache Commons Lang3/IO, Maven Artifact (version comparison)
 
 ## Module Structure
 
