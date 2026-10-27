@@ -1,6 +1,5 @@
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URI
-import java.net.URL
 
 plugins {
     kotlin("jvm") version "2.3.21"
@@ -12,7 +11,7 @@ project.group = "com.meltwater.docker"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -64,7 +63,7 @@ tasks {
         dokkaSourceSets.configureEach {
             sourceLink {
                 localDirectory.set(file("src/main/kotlin"))
-                remoteUrl.set(URL("https://github.com/meltwater/kotlin-compose"))
+                remoteUrl.set(URI("https://github.com/meltwater/kotlin-compose").toURL())
                 remoteLineSuffix.set("#L")
             }
         }
@@ -80,12 +79,11 @@ tasks {
     }
 }
 
-artifacts {
-    archives(tasks.named<Jar>("sourceJar"))
-    archives(tasks.named<Jar>("dokkaJavadocJar"))
+tasks.assemble {
+    dependsOn(tasks.named<Jar>("sourceJar"), tasks.named<Jar>("dokkaJavadocJar"))
 }
 
-companion object ArtifactoryConstants {
+object ArtifactoryConstants {
     private const val ARTIFACTORY_URL = "https://meltwater.jfrog.io/meltwater"
     const val REPO_URL = "$ARTIFACTORY_URL/team-horace"
 }
