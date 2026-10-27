@@ -1,10 +1,9 @@
-import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URI
 
 plugins {
     kotlin("jvm") version "2.3.21"
     id("maven-publish")
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka-javadoc") version "2.2.0"
 }
 
 project.group = "com.meltwater.docker"
@@ -50,23 +49,12 @@ tasks {
 
     register<Jar>("dokkaJavadocJar") {
         archiveClassifier.set("javadoc")
-        from(dokkaJavadoc.get().outputDirectory)
-        dependsOn(dokkaJavadoc)
+        from(dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
     }
 
     register<Jar>("sourceJar") {
         from(sourceSets.main.get().allSource)
         archiveClassifier.set("sources")
-    }
-
-    dokkaJavadoc<DokkaTask> {
-        dokkaSourceSets.configureEach {
-            sourceLink {
-                localDirectory.set(file("src/main/kotlin"))
-                remoteUrl.set(URI("https://github.com/meltwater/kotlin-compose").toURL())
-                remoteLineSuffix.set("#L")
-            }
-        }
     }
 
     // This is needed due to Jenkins using "artifactoryPublish" in scripts instead of publish.
@@ -101,6 +89,16 @@ if (project.hasProperty("artifactory_user")) {
 
 repositories {
     mavenCentral()
+}
+
+dokka {
+    dokkaSourceSets.configureEach {
+        sourceLink {
+            localDirectory.set(file("src/main/kotlin"))
+            remoteUrl("https://github.com/meltwater/kotlin-compose")
+            remoteLineSuffix.set("#L")
+        }
+    }
 }
 
 publishing {
