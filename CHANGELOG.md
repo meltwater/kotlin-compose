@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 4.0.0 - 2026-10-27
 ### Changes
 - Moved to Gradle 9.1.0 and Java 25. **Breaking:** the classes are now Java 25 bytecode, so consumers need a Java 25 toolchain
