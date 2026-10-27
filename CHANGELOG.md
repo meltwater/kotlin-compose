@@ -1,7 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
-- No changes
+- Moved to Gradle 9.1.0 and Java 25. **Breaking:** the classes are now Java 25 bytecode, so consumers need a Java 25 toolchain (at least for the tests that use kotlin-compose)
 
 ## 3.1.0 - 2026-10-26
 ### Changes
