@@ -33,7 +33,6 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.21.7")
     implementation("org.apache.commons:commons-lang3:3.20.0")
     implementation("commons-io:commons-io:2.21.0")
-    implementation("org.apache.maven:maven-artifact:3.8.2")
 
     testImplementation("ch.qos.logback:logback-classic:1.5.38")
     testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")

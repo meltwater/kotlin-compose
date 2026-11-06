@@ -6,7 +6,6 @@ import com.meltwater.docker.compose.ExecUtils.executeCommandAsync
 import com.meltwater.docker.compose.Recreate.DEFAULT
 import com.meltwater.docker.compose.data.InspectData
 import com.meltwater.docker.compose.data.PsResult
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -49,7 +48,7 @@ class DockerCompose private constructor(
             LOGGER.info("ERR: $line")
         }
 
-        private val MIN_DOCKER_COMPOSE_VERSION: DefaultArtifactVersion = DefaultArtifactVersion("1.5.0")
+        private val MIN_DOCKER_COMPOSE_VERSION: DockerComposeVersion = DockerComposeVersion.parse("1.5.0")
 
         private const val YAML_FILE_EXTENSION = ".yml"
 
@@ -273,7 +272,7 @@ class DockerCompose private constructor(
             }
             val v: MatchResult? = Regex(".* v?(\\d+\\.\\d+\\.\\d+)").find(versionOutput)
             val version = v?.groups?.get(1)?.value
-            if (MIN_DOCKER_COMPOSE_VERSION > DefaultArtifactVersion(version)) {
+            if (MIN_DOCKER_COMPOSE_VERSION > DockerComposeVersion.parse(version)) {
                 throw RuntimeException("The installed Docker Compose version should be at least $MIN_DOCKER_COMPOSE_VERSION but the one currently installed is $version")
             }
         } catch (e: Exception) {
