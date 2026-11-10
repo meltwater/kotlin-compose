@@ -1,5 +1,5 @@
 # kotlin-compose
-## next
+## 4.1.0 - 2026-11-10
 ### Changes
 - Dropped the `maven-artifact` dependency, and with it plexus-utils 3.2.1 (CVE-2025-67030). The Docker Compose version check now compares `major.minor.patch` itself
 
