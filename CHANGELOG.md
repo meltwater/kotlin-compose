@@ -1,6 +1,7 @@
 # kotlin-compose
 ## next
 ### Changes
+- Moved to Gradle 9.9.2
 - Upgraded to Kotlin 2.4.21 and bumped dependencies to align with platform-common-dependencies (Spring Boot 4.2.0): Jackson 2.21.8, commons-lang3 3.21.0, JUnit 6.1.3, Logback 1.6.6 (tests)
 
 ## 4.1.0 - 2026-11-10
