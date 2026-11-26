@@ -1,7 +1,7 @@
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "2.3.21"
+    kotlin("jvm") version "2.4.21"
     id("maven-publish")
     id("org.jetbrains.dokka-javadoc") version "2.2.0"
 }
@@ -20,7 +20,7 @@ configurations {
             eachDependency {
                 // Align with platform-common-dependencies. jackson-annotations is versioned without a patch number since 2.20
                 if(requested.group.startsWith("com.fasterxml.jackson") && requested.name != "jackson-annotations")
-                    useVersion("2.21.7")
+                    useVersion("2.21.8")
             }
         }
     }
@@ -29,16 +29,16 @@ configurations {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.slf4j:slf4j-api:2.0.20")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.7")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.7")
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.21.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.8")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
     implementation("commons-io:commons-io:2.21.0")
 
-    testImplementation("ch.qos.logback:logback-classic:1.5.38")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.3")
+    testImplementation("ch.qos.logback:logback-classic:1.6.6")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
     testImplementation("org.assertj:assertj-core:3.27.7")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
 }
 
 tasks {
