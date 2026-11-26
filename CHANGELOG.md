@@ -1,4 +1,8 @@
 # kotlin-compose
+## next
+### Changes
+- No changes
+
 ## 4.2.0 - 2026-11-26
 ### Changes
 - Moved to Gradle 9.9.2
